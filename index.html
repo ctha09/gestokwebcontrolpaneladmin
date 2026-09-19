@@ -6,8 +6,8 @@
 <style>
 :root{--bg:#090c10;--p:#151b22;--p2:#1c232c;--p3:#252e38;--b:#2c3642;--t:#f6f7f9;--m:#96a2af;--o:#f28c28;--g:#39c77d;--r:#ff6b6b;--y:#f0c85a;--sh:0 18px 48px rgba(0,0,0,.32)}*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--t);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:none!important}.wordmark{font-weight:1000}.wordmark .ok{color:var(--o)}.btn{min-height:43px;border:0;border-radius:13px;padding:9px 12px;font-weight:850}.primary{background:var(--o);color:#17100a}.secondary{background:var(--p3);color:#fff;border:1px solid var(--b)}.danger{background:rgba(255,107,107,.1);color:var(--r);border:1px solid rgba(255,107,107,.22)}.input,.select,.textarea{width:100%;min-height:45px;border:1px solid var(--b);border-radius:13px;background:var(--p2);color:#fff;padding:10px 11px}.textarea{min-height:80px}label{display:block;color:var(--m);font-size:8px;margin-bottom:5px}.card{background:var(--p);border:1px solid var(--b);border-radius:18px;padding:13px;box-shadow:var(--sh)}.badge{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:8px;font-weight:900;background:rgba(242,140,40,.12);color:var(--o)}.green{color:var(--g)!important}.red{color:var(--r)!important}.yellow{color:var(--y)!important}.toast{position:fixed;left:12px;right:12px;bottom:15px;padding:11px;border-radius:13px;background:#151b22;border:1px solid var(--b);z-index:1200;display:none;font-size:9px}.toast.show{display:block}.login{min-height:100svh;padding:16px 12px;background:radial-gradient(circle at 95% 0%,rgba(242,140,40,.08),transparent 25%),#0a0e13}.loginbox{max-width:520px;margin:42px auto}.login h1{font-size:30px;margin:25px 0 6px}.login p{color:var(--m);font-size:9px}.form{display:grid;gap:8px}.app{min-height:100svh;background:radial-gradient(circle at 100% 0%,rgba(242,140,40,.06),transparent 25%),#090d11}.top{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(9,13,17,.94)}.wrap{max-width:1150px;margin:auto;padding:12px 10px 90px}.section{display:flex;align-items:end;justify-content:space-between;gap:8px;margin-bottom:9px}.section h1{font-size:24px;margin:0}.section p{font-size:9px;color:var(--m);margin:3px 0 0}.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}.metric{min-height:96px;display:flex;flex-direction:column;justify-content:center}.metric span{font-size:8px;color:var(--m)}.metric strong{font-size:20px;margin-top:6px}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}.tab{min-height:45px;border:1px solid var(--b);border-radius:14px;background:var(--p2);color:var(--m);font-weight:900}.tab.active{background:rgba(242,140,40,.12);color:var(--o)}.view{display:none}.view.active{display:block}.clients{display:grid;gap:8px}.client{background:var(--p);border:1px solid var(--b);border-radius:17px;padding:12px}.ctop{display:flex;justify-content:space-between;gap:8px}.cname{font-size:13px;font-weight:950}.cmeta{font-size:8px;color:var(--m);margin-top:3px}.info{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:9px 0}.info div{padding:8px;background:var(--p2);border-radius:11px}.info small{display:block;color:var(--m);font-size:7px}.info strong{display:block;font-size:9px;margin-top:3px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:6px}.alert{padding:10px;border-radius:14px;border:1px solid rgba(240,200,90,.2);background:rgba(240,200,90,.07);margin-bottom:7px}.alert strong{font-size:10px}.alert p{font-size:8px;color:var(--m);margin:4px 0 0}.chartbox{height:240px}.chartbox canvas{width:100%;height:100%}.paylist{display:grid;gap:7px;margin-top:8px}.payrow{display:flex;justify-content:space-between;gap:8px;padding:10px;border-radius:13px;background:var(--p2);border:1px solid var(--b)}.payrow strong{font-size:10px}.payrow small{display:block;color:var(--m);font-size:8px;margin-top:3px}.money{color:var(--o);font-weight:950}.modalbg{position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.66);display:flex;align-items:end}.modal{width:100%;max-height:92svh;overflow:auto;background:var(--p);border:1px solid var(--b);border-radius:22px 22px 0 0;padding:16px 13px 20px}.modal h3{margin:0 0 5px}.modal>p{font-size:9px;color:var(--m)}.mactions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}@media(min-width:780px){.stats{grid-template-columns:repeat(4,1fr)}.clients{grid-template-columns:repeat(2,1fr)}.tabs{grid-template-columns:180px 180px}.modal{max-width:580px;margin:auto;border-radius:20px}.modalbg{align-items:center;padding:20px}}
 </style></head><body>
-<section id="setup" class="login hidden"><div class="loginbox"><div class="wordmark">Gest<span class="ok">OK</span> Control</div><h1>Configurá tu acceso.</h1><div class="card"><div class="form"><div><label>Usuario maestro</label><input id="masterUser" class="input"></div><div><label>Contraseña</label><input id="masterPass" class="input" type="password"></div><button id="createMaster" class="btn primary">Crear acceso</button></div></div></div></section>
-<section id="login" class="login hidden"><div class="loginbox"><div class="wordmark">Gest<span class="ok">OK</span> Control</div><h1>Administración general.</h1><div class="card"><div class="form"><div><label>Usuario</label><input id="loginUser" class="input"></div><div><label>Contraseña</label><input id="loginPass" class="input" type="password"></div><button id="masterLogin" class="btn primary">Ingresar</button></div></div></div></section>
+<section id="setup" class="login hidden"></section>
+<section id="login" class="login hidden"><div class="loginbox"><div class="wordmark">Gest<span class="ok">OK</span> Control</div><h1>Administración conectada.</h1><p>Clientes, mensualidades y pagos sincronizados con Supabase.</p><div class="card"><div class="form"><div><label>Email del administrador GestOK</label><input id="loginUser" class="input" type="email" autocomplete="username"></div><div><label>Contraseña</label><input id="loginPass" class="input" type="password"></div><button id="masterLogin" class="btn primary">Ingresar</button></div></div></div></section>
 <section id="app" class="app hidden"><header class="top"><div><div class="wordmark">Gest<span class="ok">OK</span> Control</div><small style="color:var(--m)">Clientes · mensualidades · pagos</small></div><button id="logout" class="btn secondary">Salir</button></header><main class="wrap">
 <div class="tabs"><button class="tab active" data-v="clientsView">Clientes y licencias</button><button class="tab" data-v="statsView">Estadísticas</button></div>
 <section id="clientsView" class="view active"><div class="section"><div><h1>Clientes y mensualidades</h1><p>Crear accesos, registrar pagos y administrar estados.</p></div><button class="btn primary" onclick="openClient()">+ Nuevo cliente</button></div><div class="stats"><div class="card metric"><span>Clientes</span><strong id="kClients">0</strong></div><div class="card metric"><span>Activos</span><strong id="kActive">0</strong></div><div class="card metric"><span>Por vencer</span><strong id="kDue">0</strong></div><div class="card metric"><span>Con deuda</span><strong id="kProblem">0</strong></div></div><div class="card" style="margin-top:9px"><strong style="font-size:12px">Alertas</strong><div id="alerts" style="margin-top:8px"></div></div><div id="clients" class="clients" style="margin-top:10px"></div></section>
@@ -18,23 +18,166 @@
 <div id="statusModal" class="modalbg hidden"><div class="modal"><h3>Cambiar estado</h3><p id="statusName"></p><div class="form"><div><label>Estado</label><select id="newStatus" class="select"><option>Activo</option><option>Pendiente de pago</option><option>Por vencer</option><option>Vencido</option></select></div><div><label>Vencimiento</label><input id="newDue" class="input" type="date"></div><div><label>Motivo</label><textarea id="newReason" class="textarea"></textarea></div></div><div class="mactions"><button class="btn secondary" onclick="closeStatus()">Cancelar</button><button id="saveStatus" class="btn primary">Guardar</button></div></div></div>
 <div id="paymentModal" class="modalbg hidden"><div class="modal"><h3>Registrar pago</h3><p id="paymentName"></p><div class="form"><div><label>Fecha</label><input id="payDate" class="input" type="date"></div><div><label>Monto</label><input id="payAmount" class="input" type="number"></div></div><div class="mactions"><button class="btn secondary" onclick="closePayment()">Cancelar</button><button id="savePayment" class="btn primary">Registrar</button></div></div></div>
 <div id="toast" class="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],DB_KEY='gestok_unified_platform_v4',MASTER_KEY='gestok_master_v4';
-let DB=loadDB(),editId=null,paymentId=null;
-function base(){return{organizations:[],records:{},notifications:[],payments:[]}}function loadDB(){try{let d=JSON.parse(localStorage.getItem(DB_KEY))||base();d.organizations=d.organizations||[];d.records=d.records||{};d.notifications=d.notifications||[];d.payments=d.payments||[];return d}catch{return base()}}function saveDB(){localStorage.setItem(DB_KEY,JSON.stringify(DB))}function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}function today(){return new Date().toISOString().slice(0,10)}function parse(s){let[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d,12)}function addMonth(s){let d=parse(s),day=d.getDate();d.setDate(1);d.setMonth(d.getMonth()+1);let last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();d.setDate(Math.min(day,last));return d.toISOString().slice(0,10)}function money(n){return new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(Number(n)||0)}function toast(t){let e=$('#toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1700)}function norm(s){return s.trim().toLowerCase().replace(/\s+/g,' ')}
-function start(){if(!localStorage.getItem(MASTER_KEY))setup.classList.remove('hidden');else login.classList.remove('hidden')}start();
-createMaster.onclick=()=>{let u=masterUser.value.trim(),p=masterPass.value;if(!u||p.length<4)return toast('Completá los datos');localStorage.setItem(MASTER_KEY,JSON.stringify({u,p}));setup.classList.add('hidden');app.classList.remove('hidden');render()};
-masterLogin.onclick=()=>{let a=JSON.parse(localStorage.getItem(MASTER_KEY)||'{}');if(loginUser.value.trim()!==a.u||loginPass.value!==a.p)return toast('Acceso incorrecto');login.classList.add('hidden');app.classList.remove('hidden');render()};logout.onclick=()=>{app.classList.add('hidden');login.classList.remove('hidden')};
+const SUPABASE_URL="https://zvmcjmjbedwaftejdduu.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable__kUv47MYA0ym6Fw7WF4c8A_jLozY3mQ";
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
+  auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:"gestok-control-auth-v15"}
+});
+</script>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let organizations=[],paymentRows=[],editId=null,paymentId=null;
+
+function today(){return new Date().toISOString().slice(0,10)}
+function parseDateOnly(s){let[y,m,d]=String(s||'').split('-').map(Number);return new Date(y,m-1,d,12)}
+function addMonth(s){let d=parseDateOnly(s),day=d.getDate();d.setDate(1);d.setMonth(d.getMonth()+1);let last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();d.setDate(Math.min(day,last));return d.toISOString().slice(0,10)}
+function money(n){return new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(Number(n)||0)}
+function toast(t){let e=$('#toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2200)}
+function subOf(o){return Array.isArray(o.subscriptions)?(o.subscriptions[0]||{}):(o.subscriptions||{})}
+
+async function requireDeveloper(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){login.classList.remove('hidden');return false}
+  const {data:dev,error}=await sb.from('developer_admins').select('user_id').eq('user_id',session.user.id).maybeSingle();
+  if(error||!dev){
+    await sb.auth.signOut();
+    login.classList.remove('hidden');
+    toast('Este usuario no está autorizado para GestOK Control');
+    return false;
+  }
+  login.classList.add('hidden');app.classList.remove('hidden');await loadData();return true;
+}
+
+async function loadData(){
+  const [{data:orgs,error:oe},{data:pays,error:pe}]=await Promise.all([
+    sb.from('organizations').select('id,name,login_slug,type,phone,monthly_fee,active,created_at,subscriptions(status,start_date,next_due_date,reason,updated_at)').order('created_at',{ascending:false}),
+    sb.from('subscription_payments').select('id,organization_id,amount,paid_at,note,initial_payment,created_at').order('paid_at',{ascending:false})
+  ]);
+  if(oe)return toast('Error cargando clientes: '+oe.message);
+  if(pe)return toast('Error cargando pagos: '+pe.message);
+  organizations=orgs||[];
+  const names=Object.fromEntries(organizations.map(o=>[o.id,o.name]));
+  paymentRows=(pays||[]).map(p=>({...p,orgName:names[p.organization_id]||'Empresa'}));
+  render();
+}
+
+masterLogin.onclick=async()=>{
+  const email=loginUser.value.trim(),password=loginPass.value;
+  if(!email||!password)return toast('Completá email y contraseña');
+  masterLogin.disabled=true;masterLogin.textContent='Ingresando...';
+  const {error}=await sb.auth.signInWithPassword({email,password});
+  masterLogin.disabled=false;masterLogin.textContent='Ingresar';
+  if(error)return toast('Acceso incorrecto');
+  await requireDeveloper();
+};
+
+logout.onclick=async()=>{await sb.auth.signOut();app.classList.add('hidden');login.classList.remove('hidden')};
+
 $$('.tab').forEach(b=>b.onclick=()=>{$$('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');$$('.view').forEach(v=>v.classList.remove('active'));$('#'+b.dataset.v).classList.add('active');if(b.dataset.v==='statsView')requestAnimationFrame(drawChart)});
-function notify(o,title,message,reason=''){DB.notifications.unshift({id:uid(),orgId:o.id,date:new Date().toISOString(),title,message,reason,read:false})}
-window.openClient=()=>{cName.value='';cType.value='commerce';cPhone.value='';cPassword.value='';cFee.value='';cStart.value=today();cDue.value=addMonth(today());cStatus.value='Activo';clientModal.classList.remove('hidden')};window.closeClient=()=>clientModal.classList.add('hidden');cStart.onchange=()=>{if(cStart.value)cDue.value=addMonth(cStart.value)};
-saveClient.onclick=()=>{let name=cName.value.trim(),fee=Number(cFee.value),pass=cPassword.value;if(!name||fee<=0||pass.length<4)return toast('Completá nombre, contraseña y mensualidad');if(DB.organizations.some(o=>norm(o.name)===norm(name)))return toast('Ya existe esa empresa');let o={id:uid(),name,type:cType.value,phone:cPhone.value.trim(),password:pass,monthlyFee:fee,active:true,createdAt:new Date().toISOString(),subscription:{startDate:cStart.value,nextDueDate:cDue.value,status:cStatus.value,reason:'',updatedAt:new Date().toISOString()}};DB.organizations.push(o);DB.records[o.id]={};DB.payments.unshift({id:uid(),orgId:o.id,orgName:o.name,date:cStart.value,amount:fee,note:'Alta inicial de suscripción'});notify(o,'Bienvenido a GestOK',`Tu empresa fue registrada. Primer pago recibido: ${money(fee)}.`,`Próximo vencimiento: ${cDue.value}`);saveDB();closeClient();render();toast('Cliente creado y primer pago registrado')};
-window.openStatus=id=>{let o=DB.organizations.find(x=>x.id===id);editId=id;statusName.textContent=o.name;newStatus.value=o.subscription.status;newDue.value=o.subscription.nextDueDate;newReason.value=o.subscription.reason||'';statusModal.classList.remove('hidden')};window.closeStatus=()=>statusModal.classList.add('hidden');saveStatus.onclick=()=>{let o=DB.organizations.find(x=>x.id===editId);o.subscription.status=newStatus.value;o.subscription.nextDueDate=newDue.value;o.subscription.reason=newReason.value.trim();notify(o,'Estado actualizado',`Tu estado fue cambiado a ${newStatus.value}.`,newReason.value.trim());saveDB();closeStatus();render();toast('Estado actualizado')};
-window.openPayment=id=>{let o=DB.organizations.find(x=>x.id===id);paymentId=id;paymentName.textContent=o.name;payDate.value=today();payAmount.value=o.monthlyFee;paymentModal.classList.remove('hidden')};window.closePayment=()=>paymentModal.classList.add('hidden');savePayment.onclick=()=>{let o=DB.organizations.find(x=>x.id===paymentId),amount=Number(payAmount.value);if(amount<=0)return toast('Monto inválido');DB.payments.unshift({id:uid(),orgId:o.id,orgName:o.name,date:payDate.value,amount,note:'Mensualidad'});o.subscription.status='Activo';o.subscription.nextDueDate=addMonth(payDate.value);o.subscription.reason='Pago registrado correctamente.';notify(o,'Pago registrado',`Registramos tu pago de ${money(amount)}.`,`Próximo vencimiento: ${o.subscription.nextDueDate}`);saveDB();closePayment();render();toast('Pago registrado')};
-window.toggleClient=id=>{let o=DB.organizations.find(x=>x.id===id);o.active=o.active===false?true:false;saveDB();render()};
-function monthKey(s){let d=parse(s);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`}function lastMonths(){let a=[],n=new Date();for(let i=5;i>=0;i--){let d=new Date(n.getFullYear(),n.getMonth()-i,1);a.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`)}return a}
-function render(){DB=loadDB();kClients.textContent=DB.organizations.length;kActive.textContent=DB.organizations.filter(o=>o.subscription.status==='Activo').length;kDue.textContent=DB.organizations.filter(o=>o.subscription.status==='Por vencer').length;kProblem.textContent=DB.organizations.filter(o=>['Pendiente de pago','Vencido'].includes(o.subscription.status)).length;let al=DB.organizations.filter(o=>['Por vencer','Pendiente de pago','Vencido'].includes(o.subscription.status));alerts.innerHTML=al.length?al.map(o=>`<div class="alert"><strong>${o.name} · ${o.subscription.status}</strong><p>${o.subscription.reason||''} Vence: ${o.subscription.nextDueDate}</p></div>`).join(''):'<span style="color:var(--m);font-size:9px">Sin alertas.</span>';clients.innerHTML=DB.organizations.length?DB.organizations.map(o=>`<article class="client"><div class="ctop"><div><div class="cname">${o.name}</div><div class="cmeta">${o.type==='commerce'?'Comercio':'Barbería'} · ${o.phone||'sin teléfono'}</div></div><span class="badge ${o.subscription.status==='Activo'?'green':o.subscription.status==='Vencido'?'red':'yellow'}">${o.subscription.status}</span></div><div class="info"><div><small>Mensualidad</small><strong>${money(o.monthlyFee)}</strong></div><div><small>Vencimiento</small><strong>${o.subscription.nextDueDate}</strong></div><div><small>Empresa</small><strong>${o.name}</strong></div><div><small>Contraseña</small><strong>${o.password}</strong></div></div><div class="actions"><button class="btn primary" onclick="openPayment('${o.id}')">Registrar pago</button><button class="btn secondary" onclick="openStatus('${o.id}')">Estado</button><button class="btn ${o.active===false?'primary':'danger'}" onclick="toggleClient('${o.id}')">${o.active===false?'Activar':'Desactivar'}</button></div></article>`).join(''):'<span style="color:var(--m);font-size:9px">No hay clientes.</span>';renderStats()}
-function renderStats(){let n=new Date(),cur=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`,p=new Date(n.getFullYear(),n.getMonth()-1,1),prev=`${p.getFullYear()}-${String(p.getMonth()+1).padStart(2,'0')}`,cp=DB.payments.filter(x=>monthKey(x.date)===cur),pp=DB.payments.filter(x=>monthKey(x.date)===prev),total=DB.payments.reduce((a,x)=>a+Number(x.amount||0),0);stMonth.textContent=money(cp.reduce((a,x)=>a+Number(x.amount||0),0));stPrev.textContent=money(pp.reduce((a,x)=>a+Number(x.amount||0),0));stTotal.textContent=money(total);stAvg.textContent=money(DB.payments.length?total/DB.payments.length:0);payments.innerHTML=DB.payments.length?DB.payments.slice(0,15).map(x=>`<div class="payrow"><div><strong>${x.orgName}</strong><small>${x.date} · ${x.note}</small></div><span class="money">${money(x.amount)}</span></div>`).join(''):'<span style="color:var(--m);font-size:9px">Sin pagos.</span>';if(statsView.classList.contains('active'))requestAnimationFrame(drawChart)}
-function drawChart(){let c=chart,r=c.getBoundingClientRect();if(r.width<20)return;let dpr=window.devicePixelRatio||1;c.width=r.width*dpr;c.height=r.height*dpr;let ctx=c.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);let keys=lastMonths(),vals=keys.map(k=>DB.payments.filter(x=>monthKey(x.date)===k).reduce((a,x)=>a+Number(x.amount||0),0)),max=Math.max(1,...vals),w=r.width,h=r.height,pl=40,pr=12,pt=16,pb=30;ctx.clearRect(0,0,w,h);ctx.strokeStyle='rgba(150,162,175,.16)';for(let i=0;i<4;i++){let y=pt+(h-pt-pb)*i/3;ctx.beginPath();ctx.moveTo(pl,y);ctx.lineTo(w-pr,y);ctx.stroke()}let pts=keys.map((k,i)=>({x:pl+(w-pl-pr)*i/(keys.length-1),y:h-pb-(vals[i]/max)*(h-pt-pb),k,v:vals[i]}));ctx.beginPath();pts.forEach((q,i)=>i?ctx.lineTo(q.x,q.y):ctx.moveTo(q.x,q.y));ctx.strokeStyle='#f28c28';ctx.lineWidth=2.5;ctx.stroke();ctx.fillStyle='#f28c28';pts.forEach(q=>{ctx.beginPath();ctx.arc(q.x,q.y,3.5,0,Math.PI*2);ctx.fill()});ctx.fillStyle='#96a2af';ctx.textAlign='center';ctx.font='9px system-ui';pts.forEach(q=>ctx.fillText(q.k.slice(5),q.x,h-9))}
+
+window.openClient=()=>{cName.value='';cType.value='commerce';cPhone.value='';cPassword.value='';cFee.value='';cStart.value=today();cDue.value=addMonth(today());cStatus.value='Activo';clientModal.classList.remove('hidden')};
+window.closeClient=()=>clientModal.classList.add('hidden');
+cStart.onchange=()=>{if(cStart.value)cDue.value=addMonth(cStart.value)};
+
+saveClient.onclick=async()=>{
+  const body={name:cName.value.trim(),type:cType.value,phone:cPhone.value.trim(),password:cPassword.value,monthlyFee:Number(cFee.value),startDate:cStart.value,nextDueDate:cDue.value,status:cStatus.value};
+  if(!body.name||body.password.length<6||body.monthlyFee<=0||!body.startDate||!body.nextDueDate)return toast('Completá todos los datos. La contraseña debe tener al menos 6 caracteres.');
+  saveClient.disabled=true;saveClient.textContent='Creando...';
+  const {data,error}=await sb.functions.invoke('admin-create-client',{body});
+  saveClient.disabled=false;saveClient.textContent='Crear cliente';
+  if(error)return toast('No se pudo crear: '+error.message);
+  if(data?.error)return toast(data.error);
+  closeClient();await loadData();toast('Cliente creado en Supabase y primer pago registrado');
+};
+
+window.openStatus=id=>{
+  const o=organizations.find(x=>x.id===id);if(!o)return;
+  const s=subOf(o);editId=id;statusName.textContent=o.name;newStatus.value=s.status||'Activo';newDue.value=s.next_due_date||today();newReason.value=s.reason||'';statusModal.classList.remove('hidden');
+};
+window.closeStatus=()=>statusModal.classList.add('hidden');
+
+saveStatus.onclick=async()=>{
+  const reason=newReason.value.trim();
+  saveStatus.disabled=true;
+  const {error}=await sb.from('subscriptions').update({status:newStatus.value,next_due_date:newDue.value,reason,updated_at:new Date().toISOString()}).eq('organization_id',editId);
+  if(!error)await sb.from('notifications').insert({organization_id:editId,title:'Estado actualizado',message:`Tu estado fue cambiado a ${newStatus.value}.`,reason});
+  saveStatus.disabled=false;
+  if(error)return toast(error.message);
+  closeStatus();await loadData();toast('Estado actualizado y notificado');
+};
+
+window.openPayment=id=>{
+  const o=organizations.find(x=>x.id===id);if(!o)return;
+  paymentId=id;paymentName.textContent=o.name;payDate.value=today();payAmount.value=o.monthly_fee||0;paymentModal.classList.remove('hidden');
+};
+window.closePayment=()=>paymentModal.classList.add('hidden');
+
+savePayment.onclick=async()=>{
+  const o=organizations.find(x=>x.id===paymentId);if(!o)return;
+  const amount=Number(payAmount.value),date=payDate.value;if(amount<=0||!date)return toast('Monto o fecha inválidos');
+  const s=subOf(o),base=(s.next_due_date&&parseDateOnly(s.next_due_date)>=parseDateOnly(date))?s.next_due_date:date,next=addMonth(base);
+  savePayment.disabled=true;
+  const {error:pe}=await sb.from('subscription_payments').insert({organization_id:o.id,amount,paid_at:date,note:'Mensualidad',initial_payment:false});
+  if(!pe){
+    const {error:se}=await sb.from('subscriptions').update({status:'Activo',next_due_date:next,reason:'Pago registrado correctamente.',updated_at:new Date().toISOString()}).eq('organization_id',o.id);
+    if(!se)await sb.from('notifications').insert({organization_id:o.id,title:'Pago registrado',message:`Registramos tu pago de ${money(amount)}. Tu estado volvió a Activo.`,reason:`Próximo vencimiento: ${next}`});
+    if(se){savePayment.disabled=false;return toast(se.message)}
+  }
+  savePayment.disabled=false;
+  if(pe)return toast(pe.message);
+  closePayment();await loadData();toast('Pago registrado en Supabase');
+};
+
+window.toggleClient=async id=>{
+  const o=organizations.find(x=>x.id===id);if(!o)return;
+  const {error}=await sb.from('organizations').update({active:o.active===false}).eq('id',id);
+  if(error)return toast(error.message);
+  await loadData();
+};
+
+function monthKey(s){let d=parseDateOnly(s);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`}
+function lastMonths(){let a=[],n=new Date();for(let i=5;i>=0;i--){let d=new Date(n.getFullYear(),n.getMonth()-i,1);a.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`)}return a}
+
+function render(){
+  kClients.textContent=organizations.length;
+  kActive.textContent=organizations.filter(o=>subOf(o).status==='Activo').length;
+  kDue.textContent=organizations.filter(o=>subOf(o).status==='Por vencer').length;
+  kProblem.textContent=organizations.filter(o=>['Pendiente de pago','Vencido'].includes(subOf(o).status)).length;
+
+  const al=organizations.filter(o=>['Por vencer','Pendiente de pago','Vencido'].includes(subOf(o).status));
+  alerts.innerHTML=al.length?al.map(o=>{let s=subOf(o);return `<div class="alert"><strong>${o.name} · ${s.status}</strong><p>${s.reason||''} Vence: ${s.next_due_date||'-'}</p></div>`}).join(''):'<span style="color:var(--m);font-size:9px">Sin alertas.</span>';
+
+  clients.innerHTML=organizations.length?organizations.map(o=>{
+    const s=subOf(o);
+    return `<article class="client"><div class="ctop"><div><div class="cname">${o.name}</div><div class="cmeta">${o.type==='commerce'?'Comercio':'Barbería'} · ${o.phone||'sin teléfono'}</div></div><span class="badge ${s.status==='Activo'?'green':s.status==='Vencido'?'red':'yellow'}">${s.status||'-'}</span></div><div class="info"><div><small>Mensualidad</small><strong>${money(o.monthly_fee)}</strong></div><div><small>Vencimiento</small><strong>${s.next_due_date||'-'}</strong></div><div><small>Acceso</small><strong>${o.name}</strong></div><div><small>Contraseña</small><strong>Protegida por Supabase Auth</strong></div></div><div class="actions"><button class="btn primary" onclick="openPayment('${o.id}')">Registrar pago</button><button class="btn secondary" onclick="openStatus('${o.id}')">Estado</button><button class="btn ${o.active===false?'primary':'danger'}" onclick="toggleClient('${o.id}')">${o.active===false?'Activar':'Desactivar'}</button></div></article>`;
+  }).join(''):'<span style="color:var(--m);font-size:9px">No hay clientes.</span>';
+  renderStats();
+}
+
+function renderStats(){
+  let n=new Date(),cur=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`,p=new Date(n.getFullYear(),n.getMonth()-1,1),prev=`${p.getFullYear()}-${String(p.getMonth()+1).padStart(2,'0')}`,cp=paymentRows.filter(x=>monthKey(x.paid_at)===cur),pp=paymentRows.filter(x=>monthKey(x.paid_at)===prev),total=paymentRows.reduce((a,x)=>a+Number(x.amount||0),0);
+  stMonth.textContent=money(cp.reduce((a,x)=>a+Number(x.amount||0),0));
+  stPrev.textContent=money(pp.reduce((a,x)=>a+Number(x.amount||0),0));
+  stTotal.textContent=money(total);
+  stAvg.textContent=money(paymentRows.length?total/paymentRows.length:0);
+  document.querySelector('#payments').innerHTML=paymentRows.length?paymentRows.slice(0,15).map(x=>`<div class="payrow"><div><strong>${x.orgName}</strong><small>${x.paid_at} · ${x.note||'Pago'}</small></div><span class="money">${money(x.amount)}</span></div>`).join(''):'<span style="color:var(--m);font-size:9px">Sin pagos.</span>';
+  if(statsView.classList.contains('active'))requestAnimationFrame(drawChart);
+}
+
+function drawChart(){
+  let c=chart,r=c.getBoundingClientRect();if(r.width<20)return;
+  let dpr=window.devicePixelRatio||1;c.width=r.width*dpr;c.height=r.height*dpr;
+  let ctx=c.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);
+  let keys=lastMonths(),vals=keys.map(k=>paymentRows.filter(x=>monthKey(x.paid_at)===k).reduce((a,x)=>a+Number(x.amount||0),0)),max=Math.max(1,...vals),w=r.width,h=r.height,pl=40,pr=12,pt=16,pb=30;
+  ctx.clearRect(0,0,w,h);ctx.strokeStyle='rgba(150,162,175,.16)';
+  for(let i=0;i<4;i++){let y=pt+(h-pt-pb)*i/3;ctx.beginPath();ctx.moveTo(pl,y);ctx.lineTo(w-pr,y);ctx.stroke()}
+  let pts=keys.map((k,i)=>({x:pl+(w-pl-pr)*i/(keys.length-1),y:h-pb-(vals[i]/max)*(h-pt-pb),k,v:vals[i]}));
+  ctx.beginPath();pts.forEach((q,i)=>i?ctx.lineTo(q.x,q.y):ctx.moveTo(q.x,q.y));ctx.strokeStyle='#f28c28';ctx.lineWidth=2.5;ctx.stroke();
+  ctx.fillStyle='#f28c28';pts.forEach(q=>{ctx.beginPath();ctx.arc(q.x,q.y,3.5,0,Math.PI*2);ctx.fill()});
+  ctx.fillStyle='#96a2af';ctx.textAlign='center';ctx.font='9px system-ui';pts.forEach(q=>ctx.fillText(q.k.slice(5),q.x,h-9));
+}
 window.addEventListener('resize',drawChart);
+requireDeveloper();
 </script></body></html>
