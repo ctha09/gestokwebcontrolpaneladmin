@@ -5,6 +5,176 @@
 <title>GestOK Control</title>
 <style>
 :root{--bg:#090c10;--p:#151b22;--p2:#1c232c;--p3:#252e38;--b:#2c3642;--t:#f6f7f9;--m:#96a2af;--o:#f28c28;--g:#39c77d;--r:#ff6b6b;--y:#f0c85a;--sh:0 18px 48px rgba(0,0,0,.32)}*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--t);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:none!important}.wordmark{font-weight:1000}.wordmark .ok{color:var(--o)}.btn{min-height:43px;border:0;border-radius:13px;padding:9px 12px;font-weight:850}.primary{background:var(--o);color:#17100a}.secondary{background:var(--p3);color:#fff;border:1px solid var(--b)}.danger{background:rgba(255,107,107,.1);color:var(--r);border:1px solid rgba(255,107,107,.22)}.input,.select,.textarea{width:100%;min-height:45px;border:1px solid var(--b);border-radius:13px;background:var(--p2);color:#fff;padding:10px 11px}.textarea{min-height:80px}label{display:block;color:var(--m);font-size:8px;margin-bottom:5px}.card{background:var(--p);border:1px solid var(--b);border-radius:18px;padding:13px;box-shadow:var(--sh)}.badge{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:8px;font-weight:900;background:rgba(242,140,40,.12);color:var(--o)}.green{color:var(--g)!important}.red{color:var(--r)!important}.yellow{color:var(--y)!important}.toast{position:fixed;left:12px;right:12px;bottom:15px;padding:11px;border-radius:13px;background:#151b22;border:1px solid var(--b);z-index:1200;display:none;font-size:9px}.toast.show{display:block}.login{min-height:100svh;padding:16px 12px;background:radial-gradient(circle at 95% 0%,rgba(242,140,40,.08),transparent 25%),#0a0e13}.loginbox{max-width:520px;margin:42px auto}.login h1{font-size:30px;margin:25px 0 6px}.login p{color:var(--m);font-size:9px}.form{display:grid;gap:8px}.app{min-height:100svh;background:radial-gradient(circle at 100% 0%,rgba(242,140,40,.06),transparent 25%),#090d11}.top{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(9,13,17,.94)}.wrap{max-width:1150px;margin:auto;padding:12px 10px 90px}.section{display:flex;align-items:end;justify-content:space-between;gap:8px;margin-bottom:9px}.section h1{font-size:24px;margin:0}.section p{font-size:9px;color:var(--m);margin:3px 0 0}.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}.metric{min-height:96px;display:flex;flex-direction:column;justify-content:center}.metric span{font-size:8px;color:var(--m)}.metric strong{font-size:20px;margin-top:6px}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}.tab{min-height:45px;border:1px solid var(--b);border-radius:14px;background:var(--p2);color:var(--m);font-weight:900}.tab.active{background:rgba(242,140,40,.12);color:var(--o)}.view{display:none}.view.active{display:block}.clients{display:grid;gap:8px}.client{background:var(--p);border:1px solid var(--b);border-radius:17px;padding:12px}.ctop{display:flex;justify-content:space-between;gap:8px}.cname{font-size:13px;font-weight:950}.cmeta{font-size:8px;color:var(--m);margin-top:3px}.info{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:9px 0}.info div{padding:8px;background:var(--p2);border-radius:11px}.info small{display:block;color:var(--m);font-size:7px}.info strong{display:block;font-size:9px;margin-top:3px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:6px}.alert{padding:10px;border-radius:14px;border:1px solid rgba(240,200,90,.2);background:rgba(240,200,90,.07);margin-bottom:7px}.alert strong{font-size:10px}.alert p{font-size:8px;color:var(--m);margin:4px 0 0}.chartbox{height:240px}.chartbox canvas{width:100%;height:100%}.paylist{display:grid;gap:7px;margin-top:8px}.payrow{display:flex;justify-content:space-between;gap:8px;padding:10px;border-radius:13px;background:var(--p2);border:1px solid var(--b)}.payrow strong{font-size:10px}.payrow small{display:block;color:var(--m);font-size:8px;margin-top:3px}.money{color:var(--o);font-weight:950}.modalbg{position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.66);display:flex;align-items:end}.modal{width:100%;max-height:92svh;overflow:auto;background:var(--p);border:1px solid var(--b);border-radius:22px 22px 0 0;padding:16px 13px 20px}.modal h3{margin:0 0 5px}.modal>p{font-size:9px;color:var(--m)}.mactions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}@media(min-width:780px){.stats{grid-template-columns:repeat(4,1fr)}.clients{grid-template-columns:repeat(2,1fr)}.tabs{grid-template-columns:180px 180px}.modal{max-width:580px;margin:auto;border-radius:20px}.modalbg{align-items:center;padding:20px}}
+
+/* ============================================================
+   V19 · GESTOK CONTROL EN ESCRITORIO
+   Solo afecta pantallas grandes.
+   ============================================================ */
+@media (min-width:1024px){
+  html,body{
+    height:auto!important;
+    min-height:100%;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+  }
+  body{
+    overflow-y:auto!important;
+  }
+
+  .app{
+    height:auto!important;
+    min-height:100vh!important;
+    overflow:visible!important;
+  }
+
+  .top{
+    padding:14px 28px!important;
+    backdrop-filter:blur(18px);
+  }
+
+  .wrap{
+    width:min(1440px,calc(100% - 48px))!important;
+    max-width:1440px!important;
+    margin:0 auto!important;
+    padding:22px 0 70px!important;
+  }
+
+  .section{
+    margin-bottom:14px!important;
+  }
+  .section h1{
+    font-size:29px!important;
+  }
+  .section p{
+    font-size:10px!important;
+  }
+
+  .stats{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:12px!important;
+  }
+  .metric{
+    min-height:115px!important;
+    padding:16px!important;
+  }
+  .metric span{
+    font-size:9px!important;
+  }
+  .metric strong{
+    font-size:24px!important;
+  }
+
+  .tabs{
+    display:flex!important;
+    width:max-content!important;
+    gap:8px!important;
+    margin-bottom:14px!important;
+  }
+  .tab{
+    min-width:190px!important;
+    min-height:48px!important;
+    padding:0 18px!important;
+  }
+
+  .clients{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:12px!important;
+  }
+
+  .client{
+    padding:16px!important;
+    border-radius:20px!important;
+  }
+  .cname{
+    font-size:15px!important;
+  }
+  .cmeta{
+    font-size:9px!important;
+  }
+  .info{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+  .info div{
+    padding:10px!important;
+  }
+  .actions{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  .chartbox{
+    height:330px!important;
+  }
+
+  .paylist{
+    max-height:none!important;
+    overflow:visible!important;
+  }
+
+  .modalbg{
+    align-items:center!important;
+    justify-content:center!important;
+    padding:30px!important;
+    overflow:auto!important;
+  }
+  .modal{
+    width:min(680px,calc(100vw - 100px))!important;
+    max-width:680px!important;
+    max-height:calc(100vh - 80px)!important;
+    border-radius:24px!important;
+    padding:22px!important;
+  }
+
+  .login{
+    min-height:100vh!important;
+    padding:50px 24px!important;
+  }
+  .loginbox{
+    width:min(520px,calc(100vw - 80px))!important;
+  }
+}
+
+@media (min-width:1500px){
+  .clients{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+  .wrap{
+    width:min(1520px,calc(100% - 64px))!important;
+    max-width:1520px!important;
+  }
+}
+
+
+/* V20 · eliminar empresa definitivamente */
+.delete-warning{
+  margin:12px 0;
+  padding:12px;
+  border-radius:14px;
+  background:rgba(255,91,91,.07);
+  border:1px solid rgba(255,91,91,.18);
+  color:#ffb0b0;
+  font-size:9px;
+  line-height:1.55
+}
+.delete-company-name{
+  margin-top:5px;
+  color:#fff;
+  font-weight:1000;
+  font-size:12px
+}
+.btn.delete-company{
+  background:rgba(255,91,91,.07)!important;
+  color:#ff8686!important;
+  border-color:rgba(255,91,91,.22)!important
+}
+.btn.delete-company:hover{
+  background:rgba(255,91,91,.13)!important
+}
+@media(min-width:1024px){
+  .actions{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+}
+
 </style></head><body>
 <section id="setup" class="login hidden"></section>
 <section id="login" class="login hidden"><div class="loginbox"><div class="wordmark">Gest<span class="ok">OK</span> Control</div><h1>Administración conectada.</h1><p>Clientes, mensualidades y pagos sincronizados con Supabase.</p><div class="card"><div class="form"><div><label>Email del administrador GestOK</label><input id="loginUser" class="input" type="email" autocomplete="username"></div><div><label>Contraseña</label><input id="loginPass" class="input" type="password"></div><button id="masterLogin" class="btn primary">Ingresar</button></div></div></div></section>
@@ -17,6 +187,32 @@
 <div id="clientModal" class="modalbg hidden"><div class="modal"><h3>Nuevo cliente</h3><p>Al crear el cliente, la mensualidad se registra automáticamente como primer pago.</p><div class="form"><div><label>Nombre de la empresa</label><input id="cName" class="input"></div><div><label>Tipo</label><select id="cType" class="select"><option value="commerce">Comercio</option><option value="barbershop">Barbería</option></select></div><div><label>Teléfono</label><input id="cPhone" class="input"></div><div><label>Contraseña</label><input id="cPassword" class="input" type="text"></div><div><label>Mensualidad</label><input id="cFee" class="input" type="number" min="0"></div><div><label>Fecha de inicio</label><input id="cStart" class="input" type="date"></div><div><label>Próximo vencimiento</label><input id="cDue" class="input" type="date"></div><div><label>Estado</label><select id="cStatus" class="select"><option>Activo</option><option>Pendiente de pago</option><option>Por vencer</option><option>Vencido</option></select></div></div><div class="mactions"><button class="btn secondary" onclick="closeClient()">Cancelar</button><button id="saveClient" class="btn primary">Crear cliente</button></div></div></div>
 <div id="statusModal" class="modalbg hidden"><div class="modal"><h3>Cambiar estado</h3><p id="statusName"></p><div class="form"><div><label>Estado</label><select id="newStatus" class="select"><option>Activo</option><option>Pendiente de pago</option><option>Por vencer</option><option>Vencido</option></select></div><div><label>Vencimiento</label><input id="newDue" class="input" type="date"></div><div><label>Motivo</label><textarea id="newReason" class="textarea"></textarea></div></div><div class="mactions"><button class="btn secondary" onclick="closeStatus()">Cancelar</button><button id="saveStatus" class="btn primary">Guardar</button></div></div></div>
 <div id="paymentModal" class="modalbg hidden"><div class="modal"><h3>Registrar pago</h3><p id="paymentName"></p><div class="form"><div><label>Fecha</label><input id="payDate" class="input" type="date"></div><div><label>Monto</label><input id="payAmount" class="input" type="number"></div></div><div class="mactions"><button class="btn secondary" onclick="closePayment()">Cancelar</button><button id="savePayment" class="btn primary">Registrar</button></div></div></div>
+<div id="deleteCompanyModal" class="modalbg hidden">
+  <div class="modal">
+    <h3>Eliminar empresa definitivamente</h3>
+    <p>Usá esta opción únicamente cuando el cliente ya no vaya a volver a utilizar GestOK.</p>
+
+    <div class="delete-warning">
+      Se eliminarán la empresa, sus ventas, stock, pedidos, gastos, sueldos,
+      turnos, clientes, pagos, suscripción, notificaciones y usuarios asociados.
+      Esta acción no se puede deshacer.
+      <div id="deleteCompanyNameLabel" class="delete-company-name"></div>
+    </div>
+
+    <div class="form">
+      <div>
+        <label>Escribí el nombre exacto de la empresa para confirmar</label>
+        <input id="deleteCompanyConfirmation" class="input" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="mactions">
+      <button class="btn secondary" onclick="closeDeleteCompany()">Cancelar</button>
+      <button id="confirmDeleteCompany" class="btn danger" disabled>Eliminar definitivamente</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast" class="toast"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -28,7 +224,7 @@ const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
 </script>
 <script>
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-let organizations=[],paymentRows=[],editId=null,paymentId=null;
+let organizations=[],paymentRows=[],editId=null,paymentId=null,deleteCompanyId=null;
 
 function today(){return new Date().toISOString().slice(0,10)}
 function parseDateOnly(s){let[y,m,d]=String(s||'').split('-').map(Number);return new Date(y,m-1,d,12)}
@@ -132,9 +328,94 @@ savePayment.onclick=async()=>{
 
 window.toggleClient=async id=>{
   const o=organizations.find(x=>x.id===id);if(!o)return;
-  const {error}=await sb.from('organizations').update({active:o.active===false}).eq('id',id);
-  if(error)return toast(error.message);
+  const activating=o.active===false;
+  const nextStatus=activating?'Activo':'Vencido';
+  const reason=activating?'Suscripción reactivada por GestOK.':'Suscripción finalizada o desactivada por GestOK.';
+
+  const {error:orgError}=await sb.from('organizations').update({active:activating}).eq('id',id);
+  if(orgError)return toast(orgError.message);
+
+  const {error:subError}=await sb.from('subscriptions')
+    .update({status:nextStatus,reason,updated_at:new Date().toISOString()})
+    .eq('organization_id',id);
+  if(subError)return toast(subError.message);
+
+  await sb.from('notifications').insert({
+    organization_id:id,
+    title:activating?'Suscripción reactivada':'Suscripción finalizada',
+    message:activating
+      ?'Tu acceso a GestOK Web Control fue reactivado.'
+      :'Tu acceso a GestOK Web Control fue desactivado. Comunicate con GestOK para reactivar el servicio.',
+    reason
+  });
+
   await loadData();
+  toast(activating?'Cliente activado':'Cliente desactivado y acceso bloqueado');
+};
+
+
+window.openDeleteCompany=id=>{
+  const o=organizations.find(x=>x.id===id);
+  if(!o)return;
+
+  deleteCompanyId=id;
+  deleteCompanyNameLabel.textContent=o.name;
+  deleteCompanyConfirmation.value='';
+  deleteCompanyConfirmation.placeholder=o.name;
+  confirmDeleteCompany.disabled=true;
+  deleteCompanyModal.classList.remove('hidden');
+
+  setTimeout(()=>deleteCompanyConfirmation.focus(),80);
+};
+
+window.closeDeleteCompany=()=>{
+  deleteCompanyId=null;
+  deleteCompanyConfirmation.value='';
+  deleteCompanyModal.classList.add('hidden');
+};
+
+deleteCompanyConfirmation.oninput=()=>{
+  const o=organizations.find(x=>x.id===deleteCompanyId);
+  confirmDeleteCompany.disabled=!o||deleteCompanyConfirmation.value.trim()!==o.name;
+};
+
+confirmDeleteCompany.onclick=async()=>{
+  const o=organizations.find(x=>x.id===deleteCompanyId);
+  if(!o)return;
+
+  const confirmation=deleteCompanyConfirmation.value.trim();
+  if(confirmation!==o.name)return toast('Escribí el nombre exacto de la empresa');
+
+  confirmDeleteCompany.disabled=true;
+  confirmDeleteCompany.textContent='Eliminando...';
+
+  const {data,error}=await sb.functions.invoke('admin-delete-client',{
+    body:{
+      organizationId:o.id,
+      confirmation
+    }
+  });
+
+  confirmDeleteCompany.textContent='Eliminar definitivamente';
+
+  if(error){
+    confirmDeleteCompany.disabled=false;
+    return toast('No se pudo eliminar: '+error.message);
+  }
+
+  if(data?.error){
+    confirmDeleteCompany.disabled=false;
+    return toast(data.error);
+  }
+
+  closeDeleteCompany();
+  await loadData();
+
+  if(data?.warnings?.length){
+    toast('Empresa eliminada, con una advertencia en Auth');
+  }else{
+    toast('Empresa eliminada definitivamente');
+  }
 };
 
 function monthKey(s){let d=parseDateOnly(s);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`}
@@ -151,7 +432,7 @@ function render(){
 
   clients.innerHTML=organizations.length?organizations.map(o=>{
     const s=subOf(o);
-    return `<article class="client"><div class="ctop"><div><div class="cname">${o.name}</div><div class="cmeta">${o.type==='commerce'?'Comercio':'Barbería'} · ${o.phone||'sin teléfono'}</div></div><span class="badge ${s.status==='Activo'?'green':s.status==='Vencido'?'red':'yellow'}">${s.status||'-'}</span></div><div class="info"><div><small>Mensualidad</small><strong>${money(o.monthly_fee)}</strong></div><div><small>Vencimiento</small><strong>${s.next_due_date||'-'}</strong></div><div><small>Acceso</small><strong>${o.name}</strong></div><div><small>Contraseña</small><strong>Protegida por Supabase Auth</strong></div></div><div class="actions"><button class="btn primary" onclick="openPayment('${o.id}')">Registrar pago</button><button class="btn secondary" onclick="openStatus('${o.id}')">Estado</button><button class="btn ${o.active===false?'primary':'danger'}" onclick="toggleClient('${o.id}')">${o.active===false?'Activar':'Desactivar'}</button></div></article>`;
+    return `<article class="client"><div class="ctop"><div><div class="cname">${o.name}</div><div class="cmeta">${o.type==='commerce'?'Comercio':'Barbería'} · ${o.phone||'sin teléfono'}</div></div><span class="badge ${s.status==='Activo'?'green':s.status==='Vencido'?'red':'yellow'}">${s.status||'-'}</span></div><div class="info"><div><small>Mensualidad</small><strong>${money(o.monthly_fee)}</strong></div><div><small>Vencimiento</small><strong>${s.next_due_date||'-'}</strong></div><div><small>Acceso</small><strong>${o.active===false?'Bloqueado':'Habilitado'}</strong></div><div><small>Contraseña</small><strong>Protegida por Supabase Auth</strong></div></div><div class="actions"><button class="btn primary" onclick="openPayment('${o.id}')">Registrar pago</button><button class="btn secondary" onclick="openStatus('${o.id}')">Estado</button><button class="btn ${o.active===false?'primary':'danger'}" onclick="toggleClient('${o.id}')">${o.active===false?'Activar':'Desactivar'}</button><button class="btn delete-company" onclick="openDeleteCompany('${o.id}')">Eliminar empresa</button></div></article>`;
   }).join(''):'<span style="color:var(--m);font-size:9px">No hay clientes.</span>';
   renderStats();
 }
