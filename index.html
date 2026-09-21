@@ -175,6 +175,47 @@
   .actions{grid-template-columns:repeat(4,minmax(0,1fr))!important}
 }
 
+
+/* V24 · edición del historial de pagos */
+.payrow{
+  align-items:center;
+}
+.pay-main{
+  min-width:0;
+  flex:1;
+}
+.pay-side{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+.pay-edit{
+  min-height:32px!important;
+  padding:6px 9px!important;
+  border-radius:10px!important;
+  font-size:8px!important;
+  white-space:nowrap;
+}
+.payment-edit-note{
+  margin-top:8px;
+  padding:9px 10px;
+  border-radius:12px;
+  background:rgba(242,140,40,.06);
+  border:1px solid rgba(242,140,40,.15);
+  color:var(--m);
+  font-size:8px;
+  line-height:1.45;
+}
+@media(max-width:560px){
+  .payrow{
+    align-items:flex-start;
+  }
+  .pay-side{
+    flex-direction:column;
+    align-items:flex-end;
+  }
+}
+
 </style></head><body>
 <section id="setup" class="login hidden"></section>
 <section id="login" class="login hidden"><div class="loginbox"><div class="wordmark">Gest<span class="ok">OK</span> Control</div><h1>Administración conectada.</h1><p>Clientes, mensualidades y pagos sincronizados con Supabase.</p><div class="card"><div class="form"><div><label>Email del administrador GestOK</label><input id="loginUser" class="input" type="email" autocomplete="username"></div><div><label>Contraseña</label><input id="loginPass" class="input" type="password"></div><button id="masterLogin" class="btn primary">Ingresar</button></div></div></div></section>
@@ -186,7 +227,7 @@
 
 <div id="clientModal" class="modalbg hidden"><div class="modal"><h3>Nuevo cliente</h3><p>Al crear el cliente, la mensualidad se registra automáticamente como primer pago.</p><div class="form"><div><label>Nombre de la empresa</label><input id="cName" class="input"></div><div><label>Tipo</label><select id="cType" class="select"><option value="commerce">Comercio</option><option value="barbershop">Barbería</option></select></div><div><label>Teléfono</label><input id="cPhone" class="input"></div><div><label>Contraseña</label><input id="cPassword" class="input" type="text"></div><div><label>Mensualidad</label><input id="cFee" class="input" type="number" min="0"></div><div><label>Fecha de inicio</label><input id="cStart" class="input" type="date"></div><div><label>Próximo vencimiento</label><input id="cDue" class="input" type="date"></div><div><label>Estado</label><select id="cStatus" class="select"><option>Activo</option><option>Pendiente de pago</option><option>Por vencer</option><option>Vencido</option></select></div></div><div class="mactions"><button class="btn secondary" onclick="closeClient()">Cancelar</button><button id="saveClient" class="btn primary">Crear cliente</button></div></div></div>
 <div id="statusModal" class="modalbg hidden"><div class="modal"><h3>Cambiar estado</h3><p id="statusName"></p><div class="form"><div><label>Estado</label><select id="newStatus" class="select"><option>Activo</option><option>Pendiente de pago</option><option>Por vencer</option><option>Vencido</option></select></div><div><label>Vencimiento</label><input id="newDue" class="input" type="date"></div><div><label>Motivo</label><textarea id="newReason" class="textarea"></textarea></div></div><div class="mactions"><button class="btn secondary" onclick="closeStatus()">Cancelar</button><button id="saveStatus" class="btn primary">Guardar</button></div></div></div>
-<div id="paymentModal" class="modalbg hidden"><div class="modal"><h3>Registrar pago</h3><p id="paymentName"></p><div class="form"><div><label>Fecha</label><input id="payDate" class="input" type="date"></div><div><label>Monto</label><input id="payAmount" class="input" type="number"></div></div><div class="mactions"><button class="btn secondary" onclick="closePayment()">Cancelar</button><button id="savePayment" class="btn primary">Registrar</button></div></div></div>
+<div id="paymentModal" class="modalbg hidden"><div class="modal"><h3 id="paymentModalTitle">Registrar pago</h3><p id="paymentName"></p><div class="form"><div><label>Fecha</label><input id="payDate" class="input" type="date"></div><div><label>Monto</label><input id="payAmount" class="input" type="number" step="0.01"></div><div><label>Concepto / nota</label><input id="payNote" class="input" maxlength="120" placeholder="Mensualidad"></div></div><div id="paymentEditNotice" class="payment-edit-note hidden">Estás corrigiendo un registro del historial. Esto actualiza estadísticas y el pago guardado, pero no modifica automáticamente el vencimiento actual de la empresa.</div><div class="mactions"><button class="btn secondary" onclick="closePayment()">Cancelar</button><button id="savePayment" class="btn primary">Registrar</button></div></div></div>
 <div id="deleteCompanyModal" class="modalbg hidden">
   <div class="modal">
     <h3>Eliminar empresa definitivamente</h3>
@@ -224,7 +265,7 @@ const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
 </script>
 <script>
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-let organizations=[],paymentRows=[],editId=null,paymentId=null,deleteCompanyId=null;
+let organizations=[],paymentRows=[],editId=null,paymentId=null,deleteCompanyId=null,paymentEditId=null;
 
 function today(){return new Date().toISOString().slice(0,10)}
 function parseDateOnly(s){let[y,m,d]=String(s||'').split('-').map(Number);return new Date(y,m-1,d,12)}
@@ -305,25 +346,130 @@ saveStatus.onclick=async()=>{
 };
 
 window.openPayment=id=>{
-  const o=organizations.find(x=>x.id===id);if(!o)return;
-  paymentId=id;paymentName.textContent=o.name;payDate.value=today();payAmount.value=o.monthly_fee||0;paymentModal.classList.remove('hidden');
+  const o=organizations.find(x=>x.id===id);
+  if(!o)return;
+
+  paymentEditId=null;
+  paymentId=id;
+
+  paymentModalTitle.textContent='Registrar pago';
+  paymentName.textContent=o.name;
+  payDate.value=today();
+  payAmount.value=o.monthly_fee||0;
+  payNote.value='Mensualidad';
+  paymentEditNotice.classList.add('hidden');
+  savePayment.textContent='Registrar';
+
+  paymentModal.classList.remove('hidden');
 };
-window.closePayment=()=>paymentModal.classList.add('hidden');
+
+window.openEditPayment=id=>{
+  const p=paymentRows.find(x=>x.id===id);
+  if(!p)return toast('No se encontró el pago');
+
+  const o=organizations.find(x=>x.id===p.organization_id);
+
+  paymentEditId=p.id;
+  paymentId=p.organization_id;
+
+  paymentModalTitle.textContent='Editar pago';
+  paymentName.textContent=o?.name||p.orgName||'Empresa';
+  payDate.value=p.paid_at;
+  payAmount.value=Number(p.amount||0);
+  payNote.value=p.note||'Mensualidad';
+  paymentEditNotice.classList.remove('hidden');
+  savePayment.textContent='Guardar cambios';
+
+  paymentModal.classList.remove('hidden');
+};
+
+window.closePayment=()=>{
+  paymentModal.classList.add('hidden');
+  paymentEditId=null;
+  paymentId=null;
+};
 
 savePayment.onclick=async()=>{
-  const o=organizations.find(x=>x.id===paymentId);if(!o)return;
-  const amount=Number(payAmount.value),date=payDate.value;if(amount<=0||!date)return toast('Monto o fecha inválidos');
-  const s=subOf(o),base=(s.next_due_date&&parseDateOnly(s.next_due_date)>=parseDateOnly(date))?s.next_due_date:date,next=addMonth(base);
+  const amount=Number(payAmount.value);
+  const date=payDate.value;
+  const note=payNote.value.trim()||'Mensualidad';
+
+  if(amount<=0||!date)return toast('Monto o fecha inválidos');
+
   savePayment.disabled=true;
-  const {error:pe}=await sb.from('subscription_payments').insert({organization_id:o.id,amount,paid_at:date,note:'Mensualidad',initial_payment:false});
-  if(!pe){
-    const {error:se}=await sb.from('subscriptions').update({status:'Activo',next_due_date:next,reason:'Pago registrado correctamente.',updated_at:new Date().toISOString()}).eq('organization_id',o.id);
-    if(!se)await sb.from('notifications').insert({organization_id:o.id,title:'Pago registrado',message:`Registramos tu pago de ${money(amount)}. Tu estado volvió a Activo.`,reason:`Próximo vencimiento: ${next}`});
-    if(se){savePayment.disabled=false;return toast(se.message)}
+
+  /* EDITAR PAGO EXISTENTE */
+  if(paymentEditId){
+    const {error}=await sb
+      .from('subscription_payments')
+      .update({
+        amount,
+        paid_at:date,
+        note
+      })
+      .eq('id',paymentEditId);
+
+    savePayment.disabled=false;
+
+    if(error)return toast(error.message);
+
+    closePayment();
+    await loadData();
+    toast('Pago actualizado correctamente');
+    return;
   }
+
+  /* REGISTRAR NUEVO PAGO */
+  const o=organizations.find(x=>x.id===paymentId);
+  if(!o){
+    savePayment.disabled=false;
+    return toast('Empresa no encontrada');
+  }
+
+  const s=subOf(o);
+  const base=(s.next_due_date&&parseDateOnly(s.next_due_date)>=parseDateOnly(date))
+    ?s.next_due_date
+    :date;
+  const next=addMonth(base);
+
+  const {error:pe}=await sb.from('subscription_payments').insert({
+    organization_id:o.id,
+    amount,
+    paid_at:date,
+    note,
+    initial_payment:false
+  });
+
+  if(!pe){
+    const {error:se}=await sb.from('subscriptions').update({
+      status:'Activo',
+      next_due_date:next,
+      reason:'Pago registrado correctamente.',
+      updated_at:new Date().toISOString()
+    }).eq('organization_id',o.id);
+
+    if(!se){
+      await sb.from('notifications').insert({
+        organization_id:o.id,
+        title:'Pago registrado',
+        message:`Registramos tu pago de ${money(amount)}. Tu estado volvió a Activo.`,
+        reason:`Próximo vencimiento: ${next}`
+      });
+    }
+
+    if(se){
+      savePayment.disabled=false;
+      return toast(se.message);
+    }
+  }
+
   savePayment.disabled=false;
+
   if(pe)return toast(pe.message);
-  closePayment();await loadData();toast('Pago registrado en Supabase');
+
+  closePayment();
+  await loadData();
+  toast('Pago registrado en Supabase');
 };
 
 window.toggleClient=async id=>{
@@ -400,12 +546,24 @@ confirmDeleteCompany.onclick=async()=>{
 
   if(error){
     confirmDeleteCompany.disabled=false;
-    return toast('No se pudo eliminar: '+error.message);
+
+    let detail=error.message||'Error al invocar la Edge Function';
+
+    try{
+      if(error.context){
+        const payload=await error.context.json();
+        detail=payload?.error||payload?.message||detail;
+        if(payload?.detail)detail+=' · '+payload.detail;
+      }
+    }catch(e){}
+
+    console.error('admin-delete-client:',error);
+    return toast(detail);
   }
 
   if(data?.error){
     confirmDeleteCompany.disabled=false;
-    return toast(data.error);
+    return toast(data.error+(data.detail?' · '+data.detail:''));
   }
 
   closeDeleteCompany();
@@ -443,7 +601,7 @@ function renderStats(){
   stPrev.textContent=money(pp.reduce((a,x)=>a+Number(x.amount||0),0));
   stTotal.textContent=money(total);
   stAvg.textContent=money(paymentRows.length?total/paymentRows.length:0);
-  document.querySelector('#payments').innerHTML=paymentRows.length?paymentRows.slice(0,15).map(x=>`<div class="payrow"><div><strong>${x.orgName}</strong><small>${x.paid_at} · ${x.note||'Pago'}</small></div><span class="money">${money(x.amount)}</span></div>`).join(''):'<span style="color:var(--m);font-size:9px">Sin pagos.</span>';
+  document.querySelector('#payments').innerHTML=paymentRows.length?paymentRows.slice(0,30).map(x=>`<div class="payrow"><div class="pay-main"><strong>${x.orgName}</strong><small>${x.paid_at} · ${x.note||'Pago'}${x.initial_payment?' · Pago inicial':''}</small></div><div class="pay-side"><span class="money">${money(x.amount)}</span><button class="btn secondary pay-edit" onclick="openEditPayment('${x.id}')">Editar</button></div></div>`).join(''):'<span style="color:var(--m);font-size:9px">Sin pagos.</span>';
   if(statsView.classList.contains('active'))requestAnimationFrame(drawChart);
 }
 
