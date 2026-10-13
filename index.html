@@ -216,18 +216,211 @@
   }
 }
 
+
+/* ============================================================
+   V25 · PRUEBAS GRATIS + MENSAJES + ACCESOS
+   ============================================================ */
+.tab-badge{
+  display:inline-flex;
+  min-width:18px;
+  height:18px;
+  padding:0 5px;
+  margin-left:5px;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  background:var(--o);
+  color:#17110a;
+  font-size:7px;
+  font-weight:1000
+}
+.tab-badge.hidden{display:none}
+.trial-badge{
+  background:rgba(110,168,255,.14)!important;
+  color:#86b5ff!important;
+  border-color:rgba(110,168,255,.25)!important
+}
+.chat-layout{
+  display:grid;
+  grid-template-columns:300px minmax(0,1fr);
+  gap:10px;
+  min-height:520px
+}
+.chat-clients,.chat-box{
+  border:1px solid var(--b);
+  border-radius:18px;
+  background:var(--p);
+  overflow:hidden
+}
+.chat-clients{
+  padding:10px;
+  overflow:auto
+}
+.chat-company{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px;
+  margin-bottom:6px;
+  border:1px solid var(--b);
+  border-radius:12px;
+  background:var(--p2);
+  color:var(--t);
+  text-align:left
+}
+.chat-company.active{border-color:var(--o)}
+.chat-company strong{display:block;font-size:9px}
+.chat-company small{display:block;margin-top:3px;color:var(--m);font-size:7px}
+.chat-unread{
+  flex:0 0 auto;
+  min-width:20px;
+  height:20px;
+  padding:0 5px;
+  display:grid;
+  place-items:center;
+  border-radius:999px;
+  background:var(--o);
+  color:#17110a;
+  font-size:7px;
+  font-weight:1000
+}
+.chat-box{
+  display:flex;
+  flex-direction:column
+}
+.chat-head{
+  padding:12px;
+  border-bottom:1px solid var(--b)
+}
+.chat-head strong{display:block;font-size:11px}
+.chat-head small{display:block;margin-top:3px;color:var(--m);font-size:8px}
+.chat-messages{
+  flex:1;
+  min-height:340px;
+  max-height:520px;
+  overflow:auto;
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px
+}
+.chat-message{
+  max-width:78%;
+  padding:9px 10px;
+  border-radius:13px;
+  border:1px solid var(--b);
+  font-size:9px;
+  line-height:1.5
+}
+.chat-message.client{
+  align-self:flex-start;
+  background:var(--p2)
+}
+.chat-message.gestok{
+  align-self:flex-end;
+  background:rgba(242,140,40,.1);
+  border-color:rgba(242,140,40,.24)
+}
+.chat-message small{
+  display:block;
+  margin-top:5px;
+  color:var(--m);
+  font-size:7px
+}
+.chat-send{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:7px;
+  padding:10px;
+  border-top:1px solid var(--b)
+}
+.credentials-note{
+  padding:9px 10px;
+  border:1px solid rgba(242,140,40,.18);
+  border-radius:12px;
+  background:rgba(242,140,40,.06);
+  color:var(--m);
+  font-size:8px;
+  line-height:1.5
+}
+@media(max-width:760px){
+  .chat-layout{grid-template-columns:1fr}
+  .chat-clients{max-height:260px}
+}
+
 </style></head><body>
 <section id="setup" class="login hidden"></section>
 <section id="login" class="login hidden"><div class="loginbox"><div class="wordmark">Gest<span class="ok">OK</span> Control</div><h1>Administración conectada.</h1><p>Clientes, mensualidades y pagos sincronizados con Supabase.</p><div class="card"><div class="form"><div><label>Email del administrador GestOK</label><input id="loginUser" class="input" type="email" autocomplete="username"></div><div><label>Contraseña</label><input id="loginPass" class="input" type="password"></div><button id="masterLogin" class="btn primary">Ingresar</button></div></div></div></section>
 <section id="app" class="app hidden"><header class="top"><div><div class="wordmark">Gest<span class="ok">OK</span> Control</div><small style="color:var(--m)">Clientes · mensualidades · pagos</small></div><button id="logout" class="btn secondary">Salir</button></header><main class="wrap">
-<div class="tabs"><button class="tab active" data-v="clientsView">Clientes y licencias</button><button class="tab" data-v="statsView">Estadísticas</button></div>
+<div class="tabs">
+  <button class="tab active" data-v="clientsView">Clientes y licencias</button>
+  <button class="tab" data-v="statsView">Estadísticas</button>
+  <button class="tab" data-v="messagesView">Mensajes <span id="messagesUnreadBadge" class="tab-badge hidden">0</span></button>
+</div>
 <section id="clientsView" class="view active"><div class="section"><div><h1>Clientes y mensualidades</h1><p>Crear accesos, registrar pagos y administrar estados.</p></div><button class="btn primary" onclick="openClient()">+ Nuevo cliente</button></div><div class="stats"><div class="card metric"><span>Clientes</span><strong id="kClients">0</strong></div><div class="card metric"><span>Activos</span><strong id="kActive">0</strong></div><div class="card metric"><span>Por vencer</span><strong id="kDue">0</strong></div><div class="card metric"><span>Con deuda</span><strong id="kProblem">0</strong></div></div><div class="card" style="margin-top:9px"><strong style="font-size:12px">Alertas</strong><div id="alerts" style="margin-top:8px"></div></div><div id="clients" class="clients" style="margin-top:10px"></div></section>
-<section id="statsView" class="view"><div class="section"><div><h1>Estadísticas de cobros</h1><p>Incluye automáticamente el primer pago al crear cada cliente.</p></div></div><div class="stats"><div class="card metric"><span>Ingresos este mes</span><strong id="stMonth">$0</strong></div><div class="card metric"><span>Mes anterior</span><strong id="stPrev">$0</strong></div><div class="card metric"><span>Total histórico</span><strong id="stTotal">$0</strong></div><div class="card metric"><span>Promedio por pago</span><strong id="stAvg">$0</strong></div></div><div class="card" style="margin-top:9px"><strong style="font-size:12px">Últimos 6 meses</strong><div class="chartbox"><canvas id="chart"></canvas></div></div><div class="card" style="margin-top:9px"><strong style="font-size:12px">Pagos</strong><div id="payments" class="paylist"></div></div></section>
+<section id="statsView" class="view"><div class="section"><div><h1>Estadísticas de cobros</h1><p>Los clientes pagos registran el primer pago automáticamente. Las pruebas gratuitas no generan cobro.</p></div></div><div class="stats"><div class="card metric"><span>Ingresos este mes</span><strong id="stMonth">$0</strong></div><div class="card metric"><span>Mes anterior</span><strong id="stPrev">$0</strong></div><div class="card metric"><span>Total histórico</span><strong id="stTotal">$0</strong></div><div class="card metric"><span>Promedio por pago</span><strong id="stAvg">$0</strong></div></div><div class="card" style="margin-top:9px"><strong style="font-size:12px">Últimos 6 meses</strong><div class="chartbox"><canvas id="chart"></canvas></div></div><div class="card" style="margin-top:9px"><strong style="font-size:12px">Pagos</strong><div id="payments" class="paylist"></div></div></section>
+<section id="messagesView" class="view">
+  <div class="section">
+    <div>
+      <h1>Mensajes de clientes</h1>
+      <p>Consultas enviadas directamente desde GestOK Web Control.</p>
+    </div>
+  </div>
+  <div class="chat-layout">
+    <div id="supportClientList" class="chat-clients"></div>
+    <div class="chat-box">
+      <div class="chat-head">
+        <strong id="supportChatTitle">Elegí un cliente</strong>
+        <small id="supportChatSubtitle">Seleccioná una empresa para ver la conversación.</small>
+      </div>
+      <div id="supportAdminMessages" class="chat-messages">
+        <span style="color:var(--m);font-size:9px">Sin conversación seleccionada.</span>
+      </div>
+      <div class="chat-send">
+        <textarea id="supportAdminInput" class="textarea" maxlength="2000" placeholder="Responder al cliente..." disabled></textarea>
+        <button id="supportAdminSend" class="btn primary" disabled>Enviar</button>
+      </div>
+    </div>
+  </div>
+</section>
 </main></section>
 
-<div id="clientModal" class="modalbg hidden"><div class="modal"><h3>Nuevo cliente</h3><p>Al crear el cliente, la mensualidad se registra automáticamente como primer pago.</p><div class="form"><div><label>Nombre de la empresa</label><input id="cName" class="input"></div><div><label>Tipo</label><select id="cType" class="select"><option value="commerce">Comercio</option><option value="barbershop">Barbería</option></select></div><div><label>Teléfono</label><input id="cPhone" class="input"></div><div><label>Contraseña</label><input id="cPassword" class="input" type="text"></div><div><label>Mensualidad</label><input id="cFee" class="input" type="number" min="0"></div><div><label>Fecha de inicio</label><input id="cStart" class="input" type="date"></div><div><label>Próximo vencimiento</label><input id="cDue" class="input" type="date"></div><div><label>Estado</label><select id="cStatus" class="select"><option>Activo</option><option>Pendiente de pago</option><option>Por vencer</option><option>Vencido</option></select></div></div><div class="mactions"><button class="btn secondary" onclick="closeClient()">Cancelar</button><button id="saveClient" class="btn primary">Crear cliente</button></div></div></div>
-<div id="statusModal" class="modalbg hidden"><div class="modal"><h3>Cambiar estado</h3><p id="statusName"></p><div class="form"><div><label>Estado</label><select id="newStatus" class="select"><option>Activo</option><option>Pendiente de pago</option><option>Por vencer</option><option>Vencido</option></select></div><div><label>Vencimiento</label><input id="newDue" class="input" type="date"></div><div><label>Motivo</label><textarea id="newReason" class="textarea"></textarea></div></div><div class="mactions"><button class="btn secondary" onclick="closeStatus()">Cancelar</button><button id="saveStatus" class="btn primary">Guardar</button></div></div></div>
+<div id="clientModal" class="modalbg hidden"><div class="modal">
+<h3>Nuevo cliente</h3>
+<p>Creá un acceso mensual o una prueba gratuita de 7 días.</p>
+<div class="form">
+  <div><label>Nombre de la empresa</label><input id="cName" class="input"></div>
+  <div><label>Usuario de acceso</label><input id="cUsername" class="input" placeholder="Ej. kiosco-centro"></div>
+  <div><label>Tipo</label><select id="cType" class="select"><option value="commerce">Comercio</option><option value="barbershop">Barbería</option></select></div>
+  <div><label>Teléfono</label><input id="cPhone" class="input"></div>
+  <div><label>Contraseña</label><input id="cPassword" class="input" type="text"></div>
+  <div><label>Mensualidad</label><input id="cFee" class="input" type="number" min="0"></div>
+  <div><label>Fecha de inicio</label><input id="cStart" class="input" type="date"></div>
+  <div><label>Próximo vencimiento / fin de prueba</label><input id="cDue" class="input" type="date"></div>
+  <div><label>Estado</label><select id="cStatus" class="select"><option>Activo</option><option>Prueba gratuita</option><option>Pendiente de pago</option><option>Por vencer</option><option>Vencido</option></select></div>
+</div>
+<div id="trialCreateNote" class="credentials-note hidden">La prueba gratuita dura 7 días. No registra un pago inicial y al finalizar el cliente queda bloqueado hasta que cambies su estado.</div>
+<div class="mactions"><button class="btn secondary" onclick="closeClient()">Cancelar</button><button id="saveClient" class="btn primary">Crear cliente</button></div>
+</div></div>
+<div id="statusModal" class="modalbg hidden"><div class="modal"><h3>Cambiar estado</h3><p id="statusName"></p><div class="form"><div><label>Estado</label><select id="newStatus" class="select"><option>Activo</option><option>Prueba gratuita</option><option>Pendiente de pago</option><option>Por vencer</option><option>Vencido</option></select></div><div><label>Vencimiento</label><input id="newDue" class="input" type="date"></div><div><label>Motivo</label><textarea id="newReason" class="textarea"></textarea></div></div><div class="mactions"><button class="btn secondary" onclick="closeStatus()">Cancelar</button><button id="saveStatus" class="btn primary">Guardar</button></div></div></div>
 <div id="paymentModal" class="modalbg hidden"><div class="modal"><h3 id="paymentModalTitle">Registrar pago</h3><p id="paymentName"></p><div class="form"><div><label>Fecha</label><input id="payDate" class="input" type="date"></div><div><label>Monto</label><input id="payAmount" class="input" type="number" step="0.01"></div><div><label>Concepto / nota</label><input id="payNote" class="input" maxlength="120" placeholder="Mensualidad"></div></div><div id="paymentEditNotice" class="payment-edit-note hidden">Estás corrigiendo un registro del historial. Esto actualiza estadísticas y el pago guardado, pero no modifica automáticamente el vencimiento actual de la empresa.</div><div class="mactions"><button class="btn secondary" onclick="closePayment()">Cancelar</button><button id="savePayment" class="btn primary">Registrar</button></div></div></div>
+<div id="credentialsModal" class="modalbg hidden">
+  <div class="modal">
+    <h3>Cambiar acceso del cliente</h3>
+    <p id="credentialsCompany"></p>
+    <div class="credentials-note">El usuario modifica el acceso con el que el cliente inicia sesión. La contraseña se cambia de forma segura mediante Supabase Auth.</div>
+    <div class="form" style="margin-top:10px">
+      <div><label>Usuario de acceso</label><input id="credentialsUsername" class="input" autocomplete="off"></div>
+      <div><label>Nueva contraseña</label><input id="credentialsPassword" class="input" type="text" placeholder="Dejar vacío para no cambiarla"></div>
+    </div>
+    <div class="mactions">
+      <button class="btn secondary" onclick="closeCredentials()">Cancelar</button>
+      <button id="saveCredentials" class="btn primary">Guardar acceso</button>
+    </div>
+  </div>
+</div>
+
 <div id="deleteCompanyModal" class="modalbg hidden">
   <div class="modal">
     <h3>Eliminar empresa definitivamente</h3>
@@ -265,11 +458,13 @@ const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
 </script>
 <script>
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-let organizations=[],paymentRows=[],editId=null,paymentId=null,deleteCompanyId=null,paymentEditId=null;
+let organizations=[],paymentRows=[],supportRows=[],editId=null,paymentId=null,deleteCompanyId=null,paymentEditId=null,credentialsOrgId=null,supportOrgId=null,supportChannel=null;
 
 function today(){return new Date().toISOString().slice(0,10)}
 function parseDateOnly(s){let[y,m,d]=String(s||'').split('-').map(Number);return new Date(y,m-1,d,12)}
 function addMonth(s){let d=parseDateOnly(s),day=d.getDate();d.setDate(1);d.setMonth(d.getMonth()+1);let last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();d.setDate(Math.min(day,last));return d.toISOString().slice(0,10)}
+function addDays(s,n){let d=parseDateOnly(s);d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)}
+function daysUntil(s){if(!s)return 0;return Math.ceil((parseDateOnly(s)-parseDateOnly(today()))/86400000)}
 function money(n){return new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(Number(n)||0)}
 function toast(t){let e=$('#toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2200)}
 function subOf(o){return Array.isArray(o.subscriptions)?(o.subscriptions[0]||{}):(o.subscriptions||{})}
@@ -288,16 +483,24 @@ async function requireDeveloper(){
 }
 
 async function loadData(){
-  const [{data:orgs,error:oe},{data:pays,error:pe}]=await Promise.all([
-    sb.from('organizations').select('id,name,login_slug,type,phone,monthly_fee,active,created_at,subscriptions(status,start_date,next_due_date,reason,updated_at)').order('created_at',{ascending:false}),
-    sb.from('subscription_payments').select('id,organization_id,amount,paid_at,note,initial_payment,created_at').order('paid_at',{ascending:false})
+  const [{data:orgs,error:oe},{data:pays,error:pe},{data:messages,error:me}]=await Promise.all([
+    sb.from('organizations').select('id,name,login_slug,type,phone,monthly_fee,active,created_at,subscriptions(status,start_date,next_due_date,trial_started_at,trial_ends_at,reason,updated_at)').order('created_at',{ascending:false}),
+    sb.from('subscription_payments').select('id,organization_id,amount,paid_at,note,initial_payment,created_at').order('paid_at',{ascending:false}),
+    sb.from('support_messages').select('*').order('created_at',{ascending:true})
   ]);
   if(oe)return toast('Error cargando clientes: '+oe.message);
   if(pe)return toast('Error cargando pagos: '+pe.message);
+  if(me)return toast('Error cargando mensajes: '+me.message);
+
   organizations=orgs||[];
+  supportRows=messages||[];
+
   const names=Object.fromEntries(organizations.map(o=>[o.id,o.name]));
   paymentRows=(pays||[]).map(p=>({...p,orgName:names[p.organization_id]||'Empresa'}));
+
   render();
+  renderSupportAdmin();
+  ensureSupportRealtime();
 }
 
 masterLogin.onclick=async()=>{
@@ -310,36 +513,87 @@ masterLogin.onclick=async()=>{
   await requireDeveloper();
 };
 
-logout.onclick=async()=>{await sb.auth.signOut();app.classList.add('hidden');login.classList.remove('hidden')};
+logout.onclick=async()=>{if(supportChannel){await sb.removeChannel(supportChannel);supportChannel=null}await sb.auth.signOut();app.classList.add('hidden');login.classList.remove('hidden')};
 
-$$('.tab').forEach(b=>b.onclick=()=>{$$('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');$$('.view').forEach(v=>v.classList.remove('active'));$('#'+b.dataset.v).classList.add('active');if(b.dataset.v==='statsView')requestAnimationFrame(drawChart)});
+$$('.tab').forEach(b=>b.onclick=()=>{$$('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');$$('.view').forEach(v=>v.classList.remove('active'));$('#'+b.dataset.v).classList.add('active');if(b.dataset.v==='statsView')requestAnimationFrame(drawChart);if(b.dataset.v==='messagesView')renderSupportAdmin()});
 
-window.openClient=()=>{cName.value='';cType.value='commerce';cPhone.value='';cPassword.value='';cFee.value='';cStart.value=today();cDue.value=addMonth(today());cStatus.value='Activo';clientModal.classList.remove('hidden')};
+window.openClient=()=>{cName.value='';cUsername.value='';cType.value='commerce';cPhone.value='';cPassword.value='';cFee.value='';cStart.value=today();cDue.value=addMonth(today());cStatus.value='Activo';trialCreateNote.classList.add('hidden');clientModal.classList.remove('hidden')};
 window.closeClient=()=>clientModal.classList.add('hidden');
-cStart.onchange=()=>{if(cStart.value)cDue.value=addMonth(cStart.value)};
+cStart.onchange=()=>{if(cStart.value)cDue.value=cStatus.value==='Prueba gratuita'?addDays(cStart.value,7):addMonth(cStart.value)};
+cStatus.onchange=()=>{const trial=cStatus.value==='Prueba gratuita';trialCreateNote.classList.toggle('hidden',!trial);if(cStart.value)cDue.value=trial?addDays(cStart.value,7):addMonth(cStart.value)};
 
 saveClient.onclick=async()=>{
-  const body={name:cName.value.trim(),type:cType.value,phone:cPhone.value.trim(),password:cPassword.value,monthlyFee:Number(cFee.value),startDate:cStart.value,nextDueDate:cDue.value,status:cStatus.value};
-  if(!body.name||body.password.length<6||body.monthlyFee<=0||!body.startDate||!body.nextDueDate)return toast('Completá todos los datos. La contraseña debe tener al menos 6 caracteres.');
+  const trial=cStatus.value==='Prueba gratuita';
+  const body={
+    name:cName.value.trim(),
+    loginUsername:cUsername.value.trim()||cName.value.trim(),
+    type:cType.value,
+    phone:cPhone.value.trim(),
+    password:cPassword.value,
+    monthlyFee:Number(cFee.value||0),
+    startDate:cStart.value,
+    nextDueDate:cDue.value,
+    status:cStatus.value,
+    trialDays:trial?7:0
+  };
+
+  if(!body.name||!body.loginUsername||body.password.length<6||!body.startDate||!body.nextDueDate)
+    return toast('Completá empresa, usuario, contraseña y fechas. La contraseña debe tener al menos 6 caracteres.');
+
+  if(!trial&&body.monthlyFee<=0)
+    return toast('Ingresá la mensualidad para un cliente pago.');
+
   saveClient.disabled=true;saveClient.textContent='Creando...';
   const {data,error}=await sb.functions.invoke('admin-create-client',{body});
   saveClient.disabled=false;saveClient.textContent='Crear cliente';
+
   if(error)return toast('No se pudo crear: '+error.message);
   if(data?.error)return toast(data.error);
-  closeClient();await loadData();toast('Cliente creado en Supabase y primer pago registrado');
+
+  closeClient();
+  await loadData();
+  toast(trial?'Prueba gratuita creada por 7 días':'Cliente creado en Supabase');
 };
 
 window.openStatus=id=>{
   const o=organizations.find(x=>x.id===id);if(!o)return;
-  const s=subOf(o);editId=id;statusName.textContent=o.name;newStatus.value=s.status||'Activo';newDue.value=s.next_due_date||today();newReason.value=s.reason||'';statusModal.classList.remove('hidden');
+  const s=subOf(o);editId=id;statusName.textContent=o.name;newStatus.value=s.status||'Activo';newDue.value=s.trial_ends_at||s.next_due_date||today();newReason.value=s.reason||'';statusModal.classList.remove('hidden');
 };
 window.closeStatus=()=>statusModal.classList.add('hidden');
 
+newStatus.onchange=()=>{
+  if(newStatus.value==='Prueba gratuita'){
+    newDue.value=addDays(today(),7);
+    if(!newReason.value.trim())newReason.value='Prueba gratuita de 7 días.';
+  }
+};
+
 saveStatus.onclick=async()=>{
   const reason=newReason.value.trim();
+  const trial=newStatus.value==='Prueba gratuita';
+  const patch={
+    status:newStatus.value,
+    next_due_date:newDue.value,
+    reason,
+    trial_started_at:trial?today():null,
+    trial_ends_at:trial?newDue.value:null,
+    updated_at:new Date().toISOString()
+  };
+
   saveStatus.disabled=true;
-  const {error}=await sb.from('subscriptions').update({status:newStatus.value,next_due_date:newDue.value,reason,updated_at:new Date().toISOString()}).eq('organization_id',editId);
-  if(!error)await sb.from('notifications').insert({organization_id:editId,title:'Estado actualizado',message:`Tu estado fue cambiado a ${newStatus.value}.`,reason});
+  const {error}=await sb.from('subscriptions').update(patch).eq('organization_id',editId);
+
+  if(!error){
+    await sb.from('notifications').insert({
+      organization_id:editId,
+      title:trial?'Prueba gratuita activada':'Estado actualizado',
+      message:trial
+        ?`Tu prueba gratuita está activa hasta el ${newDue.value}.`
+        :`Tu estado fue cambiado a ${newStatus.value}.`,
+      reason
+    });
+  }
+
   saveStatus.disabled=false;
   if(error)return toast(error.message);
   closeStatus();await loadData();toast('Estado actualizado y notificado');
@@ -579,20 +833,187 @@ confirmDeleteCompany.onclick=async()=>{
 function monthKey(s){let d=parseDateOnly(s);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`}
 function lastMonths(){let a=[],n=new Date();for(let i=5;i>=0;i--){let d=new Date(n.getFullYear(),n.getMonth()-i,1);a.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`)}return a}
 
+
+window.openCredentials=id=>{
+  const o=organizations.find(x=>x.id===id);if(!o)return;
+  credentialsOrgId=id;
+  credentialsCompany.textContent=o.name;
+  credentialsUsername.value=o.login_slug||'';
+  credentialsPassword.value='';
+  credentialsModal.classList.remove('hidden');
+};
+window.closeCredentials=()=>{
+  credentialsOrgId=null;
+  credentialsModal.classList.add('hidden');
+};
+saveCredentials.onclick=async()=>{
+  if(!credentialsOrgId)return;
+  const username=credentialsUsername.value.trim();
+  const password=credentialsPassword.value;
+
+  if(!username)return toast('Ingresá un usuario de acceso');
+  if(password&&password.length<6)return toast('La nueva contraseña debe tener al menos 6 caracteres');
+
+  saveCredentials.disabled=true;saveCredentials.textContent='Guardando...';
+  const {data,error}=await sb.functions.invoke('admin-update-client-credentials',{
+    body:{organizationId:credentialsOrgId,username,password}
+  });
+  saveCredentials.disabled=false;saveCredentials.textContent='Guardar acceso';
+
+  if(error)return toast('No se pudo actualizar: '+error.message);
+  if(data?.error)return toast(data.error);
+
+  closeCredentials();
+  await loadData();
+  toast('Acceso actualizado correctamente');
+};
+
+/* Mensajes cliente ↔ GestOK */
+function supportUnreadFor(orgId){
+  return supportRows.filter(m=>m.organization_id===orgId&&m.sender_type==='client'&&!m.read_by_admin).length;
+}
+async function ensureSupportRealtime(){
+  if(supportChannel)return;
+  supportChannel=sb.channel('gestok-control-support');
+  supportChannel.on('postgres_changes',{event:'*',schema:'public',table:'support_messages'},async()=>{
+    const {data}=await sb.from('support_messages').select('*').order('created_at',{ascending:true});
+    supportRows=data||[];
+    renderSupportAdmin();
+    render();
+  });
+  supportChannel.subscribe();
+}
+window.openSupportFor=id=>{
+  supportOrgId=id;
+  const tab=$$('.tab').find(b=>b.dataset.v==='messagesView');
+  if(tab)tab.click();
+  markSupportAdminRead(id);
+  renderSupportAdmin();
+};
+async function markSupportAdminRead(orgId){
+  await sb.rpc('support_mark_admin_read',{p_organization_id:orgId});
+  supportRows=supportRows.map(m=>m.organization_id===orgId&&m.sender_type==='client'?{...m,read_by_admin:true}:m);
+  renderSupportAdmin();
+}
+function renderSupportAdmin(){
+  const totalUnread=supportRows.filter(m=>m.sender_type==='client'&&!m.read_by_admin).length;
+  messagesUnreadBadge.textContent=totalUnread;
+  messagesUnreadBadge.classList.toggle('hidden',totalUnread===0);
+
+  const withMessages=new Set(supportRows.map(m=>m.organization_id));
+  const ordered=[...organizations].sort((a,b)=>{
+    const ua=supportUnreadFor(a.id),ub=supportUnreadFor(b.id);
+    if(ua!==ub)return ub-ua;
+    const la=[...supportRows].reverse().find(m=>m.organization_id===a.id)?.created_at||'';
+    const lb=[...supportRows].reverse().find(m=>m.organization_id===b.id)?.created_at||'';
+    return lb.localeCompare(la);
+  });
+
+  supportClientList.innerHTML=ordered.length?ordered.map(o=>{
+    const unread=supportUnreadFor(o.id);
+    const last=[...supportRows].reverse().find(m=>m.organization_id===o.id);
+    return `<button class="chat-company ${supportOrgId===o.id?'active':''}" onclick="openSupportFor('${o.id}')">
+      <span><strong>${o.name}</strong><small>${last?new Date(last.created_at).toLocaleString('es-AR',{dateStyle:'short',timeStyle:'short'}):'Sin mensajes todavía'}</small></span>
+      ${unread?`<span class="chat-unread">${unread}</span>`:''}
+    </button>`;
+  }).join(''):'<span style="color:var(--m);font-size:9px">No hay clientes.</span>';
+
+  const org=organizations.find(o=>o.id===supportOrgId);
+  if(!org){
+    supportChatTitle.textContent='Elegí un cliente';
+    supportChatSubtitle.textContent='Seleccioná una empresa para ver la conversación.';
+    supportAdminMessages.innerHTML='<span style="color:var(--m);font-size:9px">Sin conversación seleccionada.</span>';
+    supportAdminInput.disabled=true;
+    supportAdminSend.disabled=true;
+    return;
+  }
+
+  supportChatTitle.textContent=org.name;
+  supportChatSubtitle.textContent=`Usuario: ${org.login_slug||'-'} · ${subOf(org).status||'-'}`;
+  supportAdminInput.disabled=false;
+  supportAdminSend.disabled=false;
+
+  const rows=supportRows.filter(m=>m.organization_id===org.id);
+  supportAdminMessages.innerHTML=rows.length?rows.map(m=>`
+    <div class="chat-message ${m.sender_type==='gestok'?'gestok':'client'}">
+      ${m.message}
+      <small>${m.sender_type==='gestok'?'GestOK':(m.sender_name||org.name)} · ${new Date(m.created_at).toLocaleString('es-AR',{dateStyle:'short',timeStyle:'short'})}</small>
+    </div>
+  `).join(''):'<span style="color:var(--m);font-size:9px">Todavía no hay mensajes.</span>';
+  supportAdminMessages.scrollTop=supportAdminMessages.scrollHeight;
+}
+supportAdminSend.onclick=async()=>{
+  if(!supportOrgId)return;
+  const message=supportAdminInput.value.trim();
+  if(!message)return;
+  supportAdminSend.disabled=true;
+  const {error}=await sb.from('support_messages').insert({
+    organization_id:supportOrgId,
+    sender_type:'gestok',
+    sender_name:'GestOK',
+    message,
+    read_by_admin:true,
+    read_by_client:false
+  });
+  supportAdminSend.disabled=false;
+  if(error)return toast(error.message);
+  supportAdminInput.value='';
+};
+
 function render(){
   kClients.textContent=organizations.length;
-  kActive.textContent=organizations.filter(o=>subOf(o).status==='Activo').length;
-  kDue.textContent=organizations.filter(o=>subOf(o).status==='Por vencer').length;
+  kActive.textContent=organizations.filter(o=>['Activo','Prueba gratuita'].includes(subOf(o).status)).length;
+  kDue.textContent=organizations.filter(o=>{
+    const s=subOf(o);
+    if(s.status==='Prueba gratuita')return daysUntil(s.trial_ends_at||s.next_due_date)<=2;
+    return s.status==='Por vencer';
+  }).length;
   kProblem.textContent=organizations.filter(o=>['Pendiente de pago','Vencido'].includes(subOf(o).status)).length;
 
-  const al=organizations.filter(o=>['Por vencer','Pendiente de pago','Vencido'].includes(subOf(o).status));
-  alerts.innerHTML=al.length?al.map(o=>{let s=subOf(o);return `<div class="alert"><strong>${o.name} · ${s.status}</strong><p>${s.reason||''} Vence: ${s.next_due_date||'-'}</p></div>`}).join(''):'<span style="color:var(--m);font-size:9px">Sin alertas.</span>';
+  const al=organizations.filter(o=>{
+    const s=subOf(o);
+    return ['Por vencer','Pendiente de pago','Vencido'].includes(s.status) ||
+      (s.status==='Prueba gratuita'&&daysUntil(s.trial_ends_at||s.next_due_date)<=2);
+  });
+
+  alerts.innerHTML=al.length?al.map(o=>{
+    const s=subOf(o);
+    const trial=s.status==='Prueba gratuita';
+    const left=trial?Math.max(0,daysUntil(s.trial_ends_at||s.next_due_date)):null;
+    return `<div class="alert"><strong>${o.name} · ${s.status}</strong><p>${trial?`Quedan ${left} día${left===1?'':'s'} de prueba.`:(s.reason||'')} ${trial?'Finaliza':'Vence'}: ${s.trial_ends_at||s.next_due_date||'-'}</p></div>`;
+  }).join(''):'<span style="color:var(--m);font-size:9px">Sin alertas.</span>';
 
   clients.innerHTML=organizations.length?organizations.map(o=>{
     const s=subOf(o);
-    return `<article class="client"><div class="ctop"><div><div class="cname">${o.name}</div><div class="cmeta">${o.type==='commerce'?'Comercio':'Barbería'} · ${o.phone||'sin teléfono'}</div></div><span class="badge ${s.status==='Activo'?'green':s.status==='Vencido'?'red':'yellow'}">${s.status||'-'}</span></div><div class="info"><div><small>Mensualidad</small><strong>${money(o.monthly_fee)}</strong></div><div><small>Vencimiento</small><strong>${s.next_due_date||'-'}</strong></div><div><small>Acceso</small><strong>${o.active===false?'Bloqueado':'Habilitado'}</strong></div><div><small>Contraseña</small><strong>Protegida por Supabase Auth</strong></div></div><div class="actions"><button class="btn primary" onclick="openPayment('${o.id}')">Registrar pago</button><button class="btn secondary" onclick="openStatus('${o.id}')">Estado</button><button class="btn ${o.active===false?'primary':'danger'}" onclick="toggleClient('${o.id}')">${o.active===false?'Activar':'Desactivar'}</button><button class="btn delete-company" onclick="openDeleteCompany('${o.id}')">Eliminar empresa</button></div></article>`;
+    const trial=s.status==='Prueba gratuita';
+    const left=trial?Math.max(0,daysUntil(s.trial_ends_at||s.next_due_date)):null;
+    const unread=supportUnreadFor(o.id);
+    const badgeClass=s.status==='Activo'?'green':s.status==='Vencido'?'red':trial?'trial-badge':'yellow';
+
+    return `<article class="client">
+      <div class="ctop">
+        <div><div class="cname">${o.name}</div><div class="cmeta">${o.type==='commerce'?'Comercio':'Barbería'} · ${o.phone||'sin teléfono'}</div></div>
+        <span class="badge ${badgeClass}">${trial?`Prueba · ${left}d`:(s.status||'-')}</span>
+      </div>
+      <div class="info">
+        <div><small>Mensualidad</small><strong>${money(o.monthly_fee)}</strong></div>
+        <div><small>${trial?'Fin de prueba':'Vencimiento'}</small><strong>${s.trial_ends_at||s.next_due_date||'-'}</strong></div>
+        <div><small>Usuario</small><strong>${o.login_slug||'-'}</strong></div>
+        <div><small>Acceso</small><strong>${o.active===false?'Bloqueado':'Habilitado'}</strong></div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" onclick="openPayment('${o.id}')">Registrar pago</button>
+        <button class="btn secondary" onclick="openStatus('${o.id}')">Estado</button>
+        <button class="btn secondary" onclick="openCredentials('${o.id}')">Usuario / contraseña</button>
+        <button class="btn secondary" onclick="openSupportFor('${o.id}')">Mensajes${unread?` (${unread})`:''}</button>
+        <button class="btn ${o.active===false?'primary':'danger'}" onclick="toggleClient('${o.id}')">${o.active===false?'Activar':'Desactivar'}</button>
+        <button class="btn delete-company" onclick="openDeleteCompany('${o.id}')">Eliminar empresa</button>
+      </div>
+    </article>`;
   }).join(''):'<span style="color:var(--m);font-size:9px">No hay clientes.</span>';
+
   renderStats();
+  renderSupportAdmin();
 }
 
 function renderStats(){
