@@ -584,14 +584,19 @@ saveStatus.onclick=async()=>{
   const {error}=await sb.from('subscriptions').update(patch).eq('organization_id',editId);
 
   if(!error){
+    const pushTitle=trial?'Prueba gratuita activada':'Estado de GestOK actualizado';
+    const pushBody=trial
+      ?`Tu prueba gratuita está activa hasta el ${newDue.value}.`
+      :`Tu estado fue cambiado a ${newStatus.value}.${reason?' '+reason:''}`;
+
     await sb.from('notifications').insert({
       organization_id:editId,
-      title:trial?'Prueba gratuita activada':'Estado actualizado',
-      message:trial
-        ?`Tu prueba gratuita está activa hasta el ${newDue.value}.`
-        :`Tu estado fue cambiado a ${newStatus.value}.`,
+      title:pushTitle,
+      message:pushBody,
       reason
     });
+
+    await sendClientPush(editId,pushTitle,pushBody,'./?open=gestok','status-update');
   }
 
   saveStatus.disabled=false;
@@ -703,12 +708,16 @@ savePayment.onclick=async()=>{
     }).eq('organization_id',o.id);
 
     if(!se){
+      const paymentPushBody=`Registramos tu pago de ${money(amount)}. Tu estado volvió a Activo. Próximo vencimiento: ${next}.`;
+
       await sb.from('notifications').insert({
         organization_id:o.id,
         title:'Pago registrado',
         message:`Registramos tu pago de ${money(amount)}. Tu estado volvió a Activo.`,
         reason:`Próximo vencimiento: ${next}`
       });
+
+      await sendClientPush(o.id,'Pago registrado',paymentPushBody,'./?open=gestok','payment');
     }
 
     if(se){
@@ -834,6 +843,20 @@ function monthKey(s){let d=parseDateOnly(s);return `${d.getFullYear()}-${String(
 function lastMonths(){let a=[],n=new Date();for(let i=5;i>=0;i--){let d=new Date(n.getFullYear(),n.getMonth()-i,1);a.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`)}return a}
 
 
+
+async function sendClientPush(organizationId,title,body,url='./?open=gestok',tag='gestok'){
+ try{
+   const {data,error}=await sb.functions.invoke('send-web-push',{
+     body:{organizationId,title,body,url,tag}
+   });
+   if(error)console.warn('Push no enviado:',error.message);
+   return data;
+ }catch(error){
+   console.warn('Push no enviado:',error);
+   return null;
+ }
+}
+
 window.openCredentials=id=>{
   const o=organizations.find(x=>x.id===id);if(!o)return;
   credentialsOrgId=id;
@@ -957,6 +980,15 @@ supportAdminSend.onclick=async()=>{
   });
   supportAdminSend.disabled=false;
   if(error)return toast(error.message);
+
+  await sendClientPush(
+    supportOrgId,
+    'Nuevo mensaje de GestOK',
+    message.length>180?message.slice(0,177)+'...':message,
+    './?open=support',
+    'support-message'
+  );
+
   supportAdminInput.value='';
 };
 
