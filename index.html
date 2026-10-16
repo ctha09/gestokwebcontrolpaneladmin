@@ -349,6 +349,67 @@
   .chat-clients{max-height:260px}
 }
 
+
+/* ============================================================
+   V27 · LEGIBILIDAD GLOBAL
+   ============================================================ */
+:root{
+  --gestok-font: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont,
+                 "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+html{
+  font-size:16px;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
+body,button,input,select,textarea{
+  font-family:var(--gestok-font)!important;
+  letter-spacing:-0.01em;
+}
+body{font-size:15px!important;line-height:1.48!important}
+h1{font-size:27px!important;line-height:1.18!important;letter-spacing:-0.035em!important}
+h2{font-size:22px!important;line-height:1.22!important}
+h3{font-size:18px!important;line-height:1.28!important}
+.section p,.card p,.modal p,.alert p,.cmeta,.chat-company small,.credentials-note{font-size:13px!important;line-height:1.5!important}
+small{font-size:12px!important}
+label{font-size:13px!important;font-weight:750!important;margin-bottom:6px!important}
+.input,.select,.textarea,input,select,textarea{font-size:15px!important;line-height:1.35!important}
+.input,.select{min-height:44px!important}
+.textarea{min-height:92px}
+input::placeholder,textarea::placeholder{font-size:14px!important}
+.btn,button,.tab{font-size:13px!important;line-height:1.25!important}
+.btn{min-height:42px!important;padding:9px 13px!important}
+.tab{min-height:42px!important;padding:9px 12px!important}
+.cname{font-size:16px!important;line-height:1.35!important}
+.cmeta{font-size:12.5px!important}
+.info small{font-size:11.5px!important}
+.info strong{font-size:14px!important}
+.badge{font-size:12px!important;padding:6px 9px!important}
+.metric span{font-size:13px!important}
+.metric strong{font-size:24px!important}
+.metric small{font-size:12px!important}
+.alert strong{font-size:14px!important}
+.alert p{font-size:12.5px!important}
+.chat-company strong{font-size:14px!important}
+.chat-company small{font-size:11.5px!important}
+.chat-unread,.tab-badge{font-size:10px!important}
+.chat-head strong{font-size:16px!important}
+.chat-head small{font-size:12px!important}
+.chat-message{font-size:14px!important}
+.chat-message small{font-size:11px!important}
+.modal h3{font-size:20px!important}
+.modal p{font-size:13px!important}
+table,td,th{font-size:13px!important}
+th{font-weight:800!important}
+@media(max-width:760px){
+  body{font-size:14px!important}
+  h1{font-size:23px!important}
+  h2{font-size:20px!important}
+  .metric strong{font-size:21px!important}
+  .btn,button,.tab{font-size:12.5px!important}
+  .input,.select,.textarea,input,select,textarea{font-size:16px!important}
+}
+
 </style></head><body>
 <section id="setup" class="login hidden"></section>
 <section id="login" class="login hidden"><div class="loginbox"><div class="wordmark">Gest<span class="ok">OK</span> Control</div><h1>Administración conectada.</h1><p>Clientes, mensualidades y pagos sincronizados con Supabase.</p><div class="card"><div class="form"><div><label>Email del administrador GestOK</label><input id="loginUser" class="input" type="email" autocomplete="username"></div><div><label>Contraseña</label><input id="loginPass" class="input" type="password"></div><button id="masterLogin" class="btn primary">Ingresar</button></div></div></div></section>
@@ -392,7 +453,7 @@
 <div class="form">
   <div><label>Nombre de la empresa</label><input id="cName" class="input"></div>
   <div><label>Usuario de acceso</label><input id="cUsername" class="input" placeholder="Ej. kiosco-centro"></div>
-  <div><label>Tipo</label><select id="cType" class="select"><option value="commerce">Comercio</option><option value="barbershop">Barbería</option></select></div>
+  <div><label>Tipo</label><select id="cType" class="select"><option value="commerce">Comercio</option><option value="parking">Estacionamiento</option><option value="barbershop">Barbería</option></select></div>
   <div><label>Teléfono</label><input id="cPhone" class="input"></div>
   <div><label>Contraseña</label><input id="cPassword" class="input" type="text"></div>
   <div><label>Mensualidad</label><input id="cFee" class="input" type="number" min="0"></div>
@@ -1024,7 +1085,7 @@ function render(){
 
     return `<article class="client">
       <div class="ctop">
-        <div><div class="cname">${o.name}</div><div class="cmeta">${o.type==='commerce'?'Comercio':'Barbería'} · ${o.phone||'sin teléfono'}</div></div>
+        <div><div class="cname">${o.name}</div><div class="cmeta">${o.type==='commerce'?'Comercio':o.type==='parking'?'Estacionamiento':'Barbería'} · ${o.phone||'sin teléfono'}</div></div>
         <span class="badge ${badgeClass}">${trial?`Prueba · ${left}d`:(s.status||'-')}</span>
       </div>
       <div class="info">
