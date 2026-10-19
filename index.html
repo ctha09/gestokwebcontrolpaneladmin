@@ -453,7 +453,7 @@ th{font-weight:800!important}
 <div class="form">
   <div><label>Nombre de la empresa</label><input id="cName" class="input"></div>
   <div><label>Usuario de acceso</label><input id="cUsername" class="input" placeholder="Ej. kiosco-centro"></div>
-  <div><label>Tipo</label><select id="cType" class="select"><option value="commerce">Comercio</option><option value="parking">Estacionamiento</option><option value="barbershop">Barbería</option></select></div>
+  <div><label>Tipo</label><select id="cType" class="select"><option value="commerce">Comercio</option><option value="parking">Estacionamiento</option><option value="restaurant">Restaurante</option><option value="barbershop">Barbería</option></select></div>
   <div><label>Teléfono</label><input id="cPhone" class="input"></div>
   <div><label>Contraseña</label><input id="cPassword" class="input" type="text"></div>
   <div><label>Mensualidad</label><input id="cFee" class="input" type="number" min="0"></div>
@@ -1085,7 +1085,7 @@ function render(){
 
     return `<article class="client">
       <div class="ctop">
-        <div><div class="cname">${o.name}</div><div class="cmeta">${o.type==='commerce'?'Comercio':o.type==='parking'?'Estacionamiento':'Barbería'} · ${o.phone||'sin teléfono'}</div></div>
+        <div><div class="cname">${o.name}</div><div class="cmeta">${o.type==='commerce'?'Comercio':o.type==='parking'?'Estacionamiento':o.type==='restaurant'?'Restaurante':'Barbería'} · ${o.phone||'sin teléfono'}</div></div>
         <span class="badge ${badgeClass}">${trial?`Prueba · ${left}d`:(s.status||'-')}</span>
       </div>
       <div class="info">
