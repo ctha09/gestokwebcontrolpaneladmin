@@ -608,8 +608,15 @@ saveClient.onclick=async()=>{
   const {data,error}=await sb.functions.invoke('admin-create-client',{body});
   saveClient.disabled=false;saveClient.textContent='Crear cliente';
 
-  if(error)return toast('No se pudo crear: '+error.message);
+  if(error){
+    const details=error.context instanceof Response
+      ? await error.context.json().catch(()=>null)
+      : null;
+    const reference=details?.organizationId?' Referencia: '+details.organizationId+'.':'';
+    return toast((details?.error||'No se pudo confirmar el alta. Revisá el estado antes de reintentar.')+reference);
+  }
   if(data?.error)return toast(data.error);
+  if(data?.ok!==true)return toast('No se pudo confirmar el alta. Revisá el estado antes de reintentar.');
 
   closeClient();
   await loadData();
@@ -939,7 +946,7 @@ saveCredentials.onclick=async()=>{
   if(password&&password.length<6)return toast('La nueva contraseña debe tener al menos 6 caracteres');
 
   saveCredentials.disabled=true;saveCredentials.textContent='Guardando...';
-  const {data,error}=await sb.functions.invoke('admin-update-client-credentials',{
+  const {data,error}=await sb.functions.invoke('admin-update-client-credentials-5-',{
     body:{organizationId:credentialsOrgId,username,password}
   });
   saveCredentials.disabled=false;saveCredentials.textContent='Guardar acceso';
