@@ -1,4 +1,4 @@
-param([switch]$PrepareOnly)
+param([switch]$PrepareOnly, [string]$WebControlPath)
 $ErrorActionPreference = 'Stop'
 
 $source = Split-Path -Parent $PSScriptRoot
@@ -14,6 +14,7 @@ function Invoke-LocalCli {
 }
 
 if (-not $PrepareOnly) {
+    if (-not (Get-Command docker -ErrorAction SilentlyContinue)) { throw 'Docker Desktop no está instalado o docker no está en PATH.' }
     & docker info --format '{{.ServerVersion}}'
     if ($LASTEXITCODE -ne 0) { throw 'El motor de Docker tiene que estar iniciado.' }
 }
@@ -36,6 +37,14 @@ returns boolean language sql stable security definer set search_path = '' as $$
     where m.organization_id = target_org and m.auth_user_id = auth.uid() and m.active
   );
 $$;
+
+create function public.gestok_org_access_status(p_organization_id uuid)
+returns jsonb language sql stable security definer set search_path = '' as $$
+  select jsonb_build_object('allowed', public.is_org_member(p_organization_id)
+    and public.gestok_org_access_allowed(p_organization_id));
+$$;
+revoke all on function public.gestok_org_access_status(uuid) from public, anon, authenticated;
+grant execute on function public.gestok_org_access_status(uuid) to authenticated;
 
 alter table public.organizations enable row level security;
 create policy fixture_organizations_select on public.organizations for select to authenticated
@@ -75,6 +84,28 @@ grant execute on function public.gestok_v30_fixture() to service_role;
 Copy-Item -LiteralPath (Join-Path $source 'supabase/migrations/20261124000100_traslados_admin_v40.sql') -Destination $migrations
 Copy-Item -LiteralPath (Join-Path $source 'supabase/functions/admin-create-client') -Destination $functions -Recurse
 
+if ($WebControlPath) {
+    $web = (Resolve-Path -LiteralPath $WebControlPath).Path
+    foreach ($migration in @('20261125000100_traslados_v41.sql','20261125000200_traslados_v42.sql')) {
+        Copy-Item -LiteralPath (Join-Path $web ('supabase/migrations/' + $migration)) -Destination $migrations
+    }
+    # Esta migración se genera únicamente en el proyecto temporal. La suite
+    # habilita por RPC solo las organizaciones ficticias que acaba de crear.
+    $switches = @'
+alter table public.transport_settings drop constraint transport_settings_requests_disabled_v40;
+create function public.gestok_local_enable_requests(p_org uuid)
+returns void language sql security definer set search_path = '' as $$
+  update public.transport_settings s set requests_enabled = true
+  where s.organization_id = p_org and exists (
+    select 1 from public.organizations o where o.id = p_org and o.login_slug like 'test-transport-%'
+  );
+$$;
+revoke all on function public.gestok_local_enable_requests(uuid) from public, anon, authenticated;
+grant execute on function public.gestok_local_enable_requests(uuid) to service_role;
+'@
+    [IO.File]::WriteAllText((Join-Path $migrations '20261125000300_fixture_switch.sql'), $switches, $utf8)
+}
+
 if ($PrepareOnly) {
     Write-Output "Fixture preparado en $directory"
     return
@@ -90,9 +121,10 @@ try {
     $env:GESTOK_LOCAL_ANON_KEY = if ($status.ANON_KEY) { $status.ANON_KEY } else { $status.PUBLISHABLE_KEY }
     $env:GESTOK_LOCAL_SERVICE_KEY = if ($status.SERVICE_ROLE_KEY) { $status.SERVICE_ROLE_KEY } else { $status.SECRET_KEY }
     $env:GESTOK_LOCAL_RUN = '1'
+    if ($WebControlPath) { $env:GESTOK_LOCAL_V53 = '1' }
     & node --test (Join-Path $PSScriptRoot 'traslados-local.test.mjs')
     if ($LASTEXITCODE -ne 0) { throw 'Fallaron las pruebas de integración.' }
 } finally {
-    Remove-Item Env:GESTOK_LOCAL_API_URL,Env:GESTOK_LOCAL_ANON_KEY,Env:GESTOK_LOCAL_SERVICE_KEY,Env:GESTOK_LOCAL_RUN -ErrorAction SilentlyContinue
+    Remove-Item Env:GESTOK_LOCAL_API_URL,Env:GESTOK_LOCAL_ANON_KEY,Env:GESTOK_LOCAL_SERVICE_KEY,Env:GESTOK_LOCAL_RUN,Env:GESTOK_LOCAL_V53 -ErrorAction SilentlyContinue
     Invoke-LocalCli stop
 }

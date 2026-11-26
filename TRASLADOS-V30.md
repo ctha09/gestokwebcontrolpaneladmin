@@ -63,6 +63,18 @@ Antes de solicitar publicación, validar en el entorno aislado estos flujos con 
 
 ## Secuencia de instalación
 
+### Validación compartida con Web Control V51.53
+
+El lanzador acepta el repositorio de Web Control y agrega V41 y V42 después de V40 en un directorio temporal. La suite comprueba el enlace inicialmente deshabilitado, activa solo las cuentas ficticias que acaba de crear y prueba dos conductores y dos comprobantes independientes, Realtime, reintentos, reconexión, cierre, balance e invalidación del token de renovación. Esta variante requiere ambas ramas de desarrollo disponibles localmente.
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File tests/start-traslados-local.ps1 -WebControlPath ..\gestokwebcontroler
+```
+
+Para preparar los archivos sin arrancar Supabase, agregar `-PrepareOnly`. El 25 de noviembre de 2026 se comprobó la preparación local y pasaron las 14 regresiones de V30. La ejecución con Auth, gateway y WebSocket del stack sigue pendiente por falta de Docker Desktop y WSL. Ver el informe de la rama de Web Control antes de autorizar producción.
+
+### Pasos de instalación
+
 1. Confirmar que el código de la rama y los resultados de las pruebas están aprobados. Repetir la verificación del CHECK, permisos, tabla de configuración y versiones desplegadas en el destino. Guardar una copia del esquema y un respaldo verificable. Descargar la versión desplegada de `admin-create-client` para recuperación y comprobar que no haya cambios posteriores que deban conservarse.
 2. En el entorno aislado, ejecutar una sola vez el archivo `supabase/migrations/20261124000100_traslados_admin_v40.sql` completo como usuario de migración. Si el bloqueo expira o una comprobación falla, verificar que la transacción se revirtió e investigar la causa antes de repetir. Confirmar el CHECK de cinco sectores, el RPC restringido, la unicidad del UUID y el bloqueo de solicitudes. Usar esta misma secuencia en producción únicamente con autorización de Carlos y registrar destino, archivo, revisión, fecha y resultado.
 3. Desplegar únicamente `admin-create-client` al destino validado, con verificación JWT habilitada. Desde el administrador y con `$destino` asignado a la referencia que se verificó, ejecutar `npx.cmd supabase@3.4.0 functions deploy admin-create-client --remote=$destino --use-api` y comprobar el estado con `npx.cmd supabase@3.4.0 functions list --remote=$destino`. Probar el alta en el entorno aislado. El despliegue de producción requiere autorización. Verificar que el destino también tenga la función compatible de edición de credenciales.

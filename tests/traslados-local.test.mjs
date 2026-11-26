@@ -15,6 +15,41 @@ function verifyLocalAddress() {
   return url
 }
 
+async function watchInserts(base, key, token) {
+  const url = new URL('/realtime/v1/websocket', base)
+  url.protocol = 'ws:'
+  url.search = new URLSearchParams({ apikey: key, vsn: '1.0.0' })
+  const socket = new WebSocket(url)
+  const topic = 'realtime:gestok-test-' + randomUUID()
+  const records = []
+  try {
+    await new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error('Realtime no confirmó la suscripción')), 12000)
+      socket.addEventListener('error', () => { clearTimeout(timer); reject(new Error('No se pudo conectar a Realtime')) }, { once: true })
+      socket.addEventListener('open', () => socket.send(JSON.stringify({
+        topic, event: 'phx_join', ref: '1', payload: { access_token: token, config: {
+          broadcast: { self: false }, presence: { key: '' },
+          postgres_changes: [{ event: 'INSERT', schema: 'public', table: 'transport_requests' }],
+        } },
+      })), { once: true })
+      socket.addEventListener('message', event => {
+        const message = JSON.parse(event.data)
+        if (message.event === 'postgres_changes') records.push(message.payload.data.record)
+        if (message.ref === '1' && message.event === 'phx_reply') {
+          clearTimeout(timer)
+          const accepted = message.payload.status === 'ok' && message.payload.response?.postgres_changes?.length === 1
+          if (accepted) resolve()
+          else reject(new Error('Realtime rechazó la suscripción'))
+        }
+      })
+    })
+  } catch (error) {
+    socket.close()
+    throw error
+  }
+  return { records, close: () => socket.close() }
+}
+
 test('Supabase local: Auth, Edge Function, suscripciones y RLS de los cinco sectores', {
   timeout: 180_000, skip: process.env.GESTOK_LOCAL_RUN === '1' ? false : 'Ejecutar start-traslados-local.ps1',
 }, async (t) => {
@@ -122,7 +157,7 @@ test('Supabase local: Auth, Edge Function, suscripciones y RLS de los cinco sect
           assert.equal(settings[0].requests_enabled, false)
           expect(await request(path, { token }), [401, 403, 404], 'Configuración para miembro')
           expect(await request(path), [401, 403, 404], 'Configuración para anónimo')
-          accounts.push({ type, token, id: created.organizationId, code: settings[0].public_code })
+          accounts.push({ type, token, session, id: created.organizationId, code: settings[0].public_code })
         } else {
           accounts.push({ type, token, id: created.organizationId })
         }
@@ -141,5 +176,88 @@ test('Supabase local: Auth, Edge Function, suscripciones y RLS de los cinco sect
     }
     expect(await request(edge, { method: 'POST', token: accounts[0].token, body: {} }), 403, 'Alta por cliente')
     expect(await request(edge, { method: 'POST', body: {} }), 401, 'Alta sin sesión')
+  })
+
+  if (process.env.GESTOK_LOCAL_V53 !== '1') return
+  await t.test('V53: dos conductores, comprobantes independientes, Realtime, cierres y finanzas', async t => {
+    const [a, b] = accounts.filter(account => account.type === 'transport')
+    const rpc = (name, body, options = {}) => request('/rest/v1/rpc/' + name, { ...options, method: 'POST', body })
+    const receipt = () => randomBytes(32).toString('hex')
+    const draft = (account, key) => ({ p_code: account.code, p_receipt: key,
+      p_pickup: 'Punto ficticio', p_destination: 'Destino ficticio', p_lat: null, p_lng: null,
+      p_schedule: 'now', p_at: null })
+    const submit = async body => expect(await rpc('gestok_transport_submit', body), 200, 'Solicitud ficticia')
+    const status = async (account, key) => expect(await rpc('gestok_transport_request_status',
+      { p_code: account.code, p_receipt: key }), 200, 'Estado del comprobante')
+    const list = async account => expect(await request('/rest/v1/transport_requests?select=id,status,updated_at',
+      { token: account.token }), 200, 'Pedidos visibles')
+    for (const account of [a, b]) {
+      assert.equal(expect(await rpc('gestok_transport_public_available', { p_code: account.code }), 200, 'Disponibilidad antes de activar'), false)
+      expect(await rpc('gestok_local_enable_requests', { p_org: account.id }, { key: serviceKey }), 204, 'Activación ficticia')
+    }
+    const listenerA = await watchInserts(base, anonKey, a.token)
+    t.after(listenerA.close)
+    const listenerB = await watchInserts(base, anonKey, b.token)
+    t.after(listenerB.close)
+    const keyA = receipt(), keyB = receipt()
+    const [first, duplicate, second] = await Promise.all([submit(draft(a, keyA)), submit(draft(a, keyA)), submit(draft(b, keyB))])
+    assert.equal(duplicate, first)
+    assert.notEqual(first, second)
+    const waitForEvents = async condition => {
+      const expiry = Date.now() + 12000
+      while (!condition()) {
+        if (Date.now() >= expiry) throw new Error('No llegó el evento esperado por Realtime')
+        await new Promise(resolve => setTimeout(resolve, 150))
+      }
+    }
+    await waitForEvents(() => listenerA.records.some(row => row.id === first) && listenerB.records.some(row => row.id === second))
+    assert.ok(listenerA.records.every(row => row.organization_id === a.id))
+    assert.ok(listenerB.records.every(row => row.organization_id === b.id))
+    assert.deepEqual((await list(a)).map(row => row.id), [first])
+    assert.deepEqual((await list(b)).map(row => row.id), [second])
+    assert.deepEqual(await status(b, keyA), [])
+    assert.deepEqual(await status(a, keyB), [])
+    assert.deepEqual(Object.keys((await status(a, keyA))[0]).sort(),
+      ['id','status','pickup_at','delay_minutes','amount','updated_at'].sort())
+
+    const action = async (account, id, verb, delay = null) => {
+      const row = (await list(account)).find(row => row.id === id)
+      const args = { p_org: account.id, p_request: id, p_version: row.updated_at,
+        p_action: verb, p_delay: delay, p_amount: null }
+      expect(await rpc('gestok_transport_driver_action', args, { token: account.token }), 204, verb)
+    }
+    await action(a, first, 'delay', 45)
+    assert.equal((await status(a, keyA))[0].delay_minutes, 45)
+    await action(a, first, 'confirm')
+    assert.equal((await status(a, keyA))[0].status, 'confirmed')
+    await action(b, second, 'reject')
+    assert.equal((await status(b, keyB))[0].status, 'rejected')
+    const current = (await list(a)).find(row => row.id === first)
+    const close = { p_org: a.id, p_request: first, p_version: current.updated_at,
+      p_outcome: 'completed', p_amount: 100, p_payment: 'transfer' }
+    for (let i = 0; i < 2; i++) expect(await rpc('gestok_transport_close_v42', close, { token: a.token }), 204, 'Cierre')
+    assert.equal((await status(a, keyA))[0].status, 'completed')
+    const expense = { p_org: a.id, p_id: randomUUID(), p_category: 'fuel',
+      p_description: 'Gasto ficticio', p_amount: 25, p_at: new Date(Date.now() - 1000).toISOString() }
+    for (let i = 0; i < 2; i++) expect(await rpc('gestok_transport_add_expense_v42', expense, { token: a.token }), 200, 'Gasto')
+    const finances = expect(await rpc('gestok_transport_finance_v42',
+      { p_org: a.id, p_period: 'month', p_anchor: null }, { token: a.token }), 200, 'Balance')
+    assert.deepEqual([finances.income,finances.expenses,finances.net,finances.trips], [100,25,75,1])
+    const historical = expect(await rpc('gestok_transport_history_v42', {
+      p_org: a.id, p_from: null, p_to: null, p_status: 'completed', p_payment: 'transfer', p_offset: 0,
+    }, { token: a.token }), 200, 'Historial')
+    assert.equal(historical.length, 1)
+    assert.ok(!('pickup_lat' in historical[0]))
+    listenerA.close()
+    const missed = await submit(draft(a, receipt()))
+    const reconnected = await watchInserts(base, anonKey, a.token)
+    t.after(reconnected.close)
+    assert.ok((await list(a)).some(row => row.id === missed))
+    const live = await submit(draft(a, receipt()))
+    await waitForEvents(() => reconnected.records.some(row => row.id === live))
+    expect(await request('/auth/v1/logout', { method: 'POST', token: b.token }), [200, 204], 'Cerrar sesión')
+    expect(await request('/auth/v1/token?grant_type=refresh_token', {
+      method: 'POST', body: { refresh_token: b.session.refresh_token },
+    }), [400, 401, 403], 'Token de renovación revocado')
   })
 })
